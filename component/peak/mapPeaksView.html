@@ -1,0 +1,27 @@
+<uib-accordion close-others="false">
+    <uib-accordion-group is-open="status.siteOpen">
+        <uib-accordion-heading>
+            <span>Peaks</span>
+            <i class="acc-heading-icon" ng-class="{'ion-arrow-down-b': status.siteOpen, 'ion-arrow-right-b': !status.siteOpen}"></i>
+        </uib-accordion-heading>
+        <div ng-if="showPeaks">
+            <div ng-if="sitePeaks.length > 0">
+                <table class="table table-striped table-condensed">
+                    <tr>
+                        <th>Peak Date</th>
+                        <th>Peak Stage</th>
+                        <th>Peak Datum</th>
+                    </tr>
+                    <tr ng-repeat="p in sitePeaks">
+                        <td>{{p.PEAK_DATE | date: 'MM/dd/yyyy hh:mm a'}} UTC</td>
+                        <td>{{p.PEAK_STAGE}}</td>
+                        <td>{{p.DATUM_NAME}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div ng-if="sitePeaks.length == 0">
+                No Peaks.
+            </div>
+        </div>
+    </uib-accordion-group>
+</uib-accordion>

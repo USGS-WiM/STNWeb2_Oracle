@@ -1,0 +1,103 @@
+<uib-accordion close-others="false">
+    <uib-accordion-group is-open="status.siteOpen">
+        <uib-accordion-heading>
+            <span>Map Filters</span>
+            <i class="acc-heading-icon" ng-class="{'ion-arrow-down-b': status.siteOpen, 'ion-arrow-right-b': !status.siteOpen}"></i>
+        </uib-accordion-heading>
+
+
+        <form name="siteSearchForm">
+            <div class="form-group col-md-6">
+                <label class="col-md-4 control-label">Events:</label>
+                <div class="col-md-6">{{sessionEvent}}
+                </div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label class="col-md-4 control-label">States:</label>
+                <div class="col-md-6">
+                    <div isteven-multi-select
+                         input-model="states"
+                         output-model="Chosen.state"
+                         button-label="STATE_NAME"
+                         item-label="STATE_NAME"
+                         max-height="300px"
+                         on-item-click="stateClick(data)"
+                         tick-property="selected"
+                         helper-elements="filter">
+
+                    </div>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group col-md-6">
+                <label class="col-md-4 control-label">Sensor Types:</label>
+                <div class="col-md-6">
+                    <select class="form-control" id="SENSOR_TYPE_ID" name="SENSOR_TYPE_ID" ng-model="Chosen.sensor"
+                            ng-options="s.SENSOR_TYPE_ID as s.SENSOR for s in senTypes | orderBy: 'SENSOR'">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label class="col-md-4 control-label">Network Names:</label>
+                <div class="col-md-6">
+                    <select class="form-control" id="NETWORK_NAME_ID" name="NETWORK_NAME_ID" ng-model="Chosen.network"
+                            ng-options="n.NETWORK_NAME_ID as n.NAME for n in netNames | orderBy: 'NAME'">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+
+            <br />
+
+            <div>
+                <div class="form-group col-md-3">
+                    <label class="col-md-7 control-label">HWM Only Sites:</label>
+                    <div class="col-md-1">
+                        <input type="checkbox" ng-model="checkboxModel.hwmOnly" ng-true-value="'1'" ng-false-value="'0'" />
+                    </div>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label class="col-md-8 control-label">Sensor Only Sites:</label>
+                    <div class="col-md-1">
+                        <input type="checkbox" ng-model="checkboxModel.senOnly" ng-true-value="'1'" ng-false-value="'0'" />
+                    </div>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label class="col-md-7 control-label">RDG Only Sites:</label>
+                    <div class="col-md-1">
+                        <input type="checkbox" ng-model="checkboxModel.rdgOnly" ng-true-value="'1'" ng-false-value="'0'" />
+                    </div>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label class="col-md-7 control-label">Has OP Defined:</label>
+                    <div class="col-md-1">
+                        <input type="checkbox" ng-model="checkboxModel.opDefined" ng-true-value="'1'" ng-false-value="'0'" />
+                    </div>
+                </div>
+            </div>
+
+            <br clear="all" />
+            <!--Search buttons-->
+            <div class="form-group">
+                <div class="col-md-4 col-md-offset-2">
+            <span>
+                <button class="btn btn-primary large" ng-click="searchSites()">Filter Sites</button>
+            </span>
+            <span>
+                <button class="btn btn-primary large" ng-click="clearFilters()">Clear Filters</button>
+            </span>
+                </div>
+            </div>
+        </form>
+
+
+    </uib-accordion-group>
+</uib-accordion>

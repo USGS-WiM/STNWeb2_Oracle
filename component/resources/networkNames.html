@@ -1,0 +1,85 @@
+<div ng-if="accountRole == 'Admin'">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width:0"></th>
+                <th>Network Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="nn in netNameList | orderBy: 'NAME'">
+                <td style="white-space: nowrap">
+                    <!-- form -->
+                    <form editable-form name="NNrowform" onaftersave="saveNetworkName($data, nn.NETWORK_NAME_ID)" ng-show="NNrowform.$visible" class="form-buttons form-inline" shown="inserted == nn">
+                        <button type="submit" ng-disabled="NNrowform.$waiting" class="btn btn-primary">
+                            save
+                        </button>
+                        <button type="button" ng-disabled="NNrowform.$waiting" ng-click="NNrowform.$cancel()" class="btn btn-default">
+                            cancel
+                        </button>
+                    </form>
+                    <div class="buttons" ng-show="!NNrowform.$visible">
+                        <button class="btn btn-primary" ng-click="NNrowform.$show()">edit</button>
+                        <button class="btn btn-danger" ng-click="deleteNetworkName(nn)">del</button>
+                    </div>
+                </td>
+                <td>
+                    <div style="display:none"><span editable-text="nn.NETWORK_NAME_ID" e-form="NNrowform" e-name="NETWORK_NAME_ID">{{nn.NETWORK_NAME_ID}}</span></div>
+                    <span editable-text="nn.NAME" e-name="NAME" e-form="NNrowform">{{ nn.NAME || '' }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    <button ng-show="addNNButtonShowing" class="btn btn-primary" ng-click="showAddNNClicked()">Add New Network Name</button>
+
+    <div ng-show="showAddNNForm">
+        <form class="form-horizontal" name="lookupForm.netNameFm">
+            <fieldset>
+
+                <div class="form-group required">
+                    <label class="col-md-3 control-label req" for="NAME">Network Name:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="NAME" name="NAME" type="text" placeholder="" ng-model="newNN.NAME" required />
+                    </div>
+                </div>
+
+
+                <!--submit button-->
+                <div class="form-group">
+                    <div class="col-md-2 col-md-offset-2">
+                        <span>
+                            <button class="btn btn-primary" ng-click="AddNetworkName(lookupForm.netNameFm.$valid, newNN)">
+                                Add
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form><button class="btn btn-default center-block" style="margin-top:-48px;" ng-click="NeverMindNN()">
+            Never Mind
+        </button>
+    </div>
+</div><!--end admin view-->
+<div ng-if="accountRole !='Admin'">
+    <script>
+        var sortingOrder = 'NAME';
+    </script>
+
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th class="NAME">Network Name&nbsp;<a ng-click="sort_by('NAME')"><i class="glyphicon glyphicon-sort"></i></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="nn in netNameList | orderBy:sortingOrder:reverse">
+                <td>{{ nn.NAME || '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

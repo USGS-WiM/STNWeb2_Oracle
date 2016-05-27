@@ -1,0 +1,40 @@
+<div class="">
+    <h3>Resources</h3>
+    <!-- Sidebar -->
+    <div id="wrapper">
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li ng-class="{active: activeMenu == 'agency'}"><a ui-sref="resources.ResourcesList.agency" ng-click="activeMenu = 'agency'">Agencies</a></li>
+                <li ng-class="{active: activeMenu == 'contactT'}"><a ui-sref="resources.ResourcesList.ContactType" ng-click="activeMenu = 'contactT'">Contact Types</a></li>
+                <li ng-class="{active: activeMenu == 'depPrio'}"><a ui-sref="resources.ResourcesList.DepPriority" ng-click="activeMenu = 'depPrio'">Deployment Priority</a></li>
+                <li ng-class="{active: activeMenu == 'eventstat'}"><a ui-sref="resources.ResourcesList.EventStatus" ng-click="activeMenu = 'eventstat'">Event Status</a></li>
+                <li ng-class="{active: activeMenu == 'eventtype'}"><a ui-sref="resources.ResourcesList.EventType" ng-click="activeMenu = 'eventtype'">Event Types</a></li>
+                <li ng-class="{active: activeMenu == 'filetype'}"><a ui-sref="resources.ResourcesList.FileType" ng-click="activeMenu = 'filetype'">File Types</a></li>
+                <li ng-class="{active: activeMenu == 'horcolme'}"><a ui-sref="resources.ResourcesList.HorCollMethd" ng-click="activeMenu = 'horcolme'">Horizontal Collection Methods</a></li>
+                <li ng-class="{active: activeMenu == 'hordat'}"><a ui-sref="resources.ResourcesList.HorDatum" ng-click="activeMenu = 'hordat'">Horizontal Datums</a></li>
+                <li ng-class="{active: activeMenu == 'housety'}"><a ui-sref="resources.ResourcesList.HousingType" ng-click="activeMenu = 'housety'">Housing Types</a></li>
+                <li ng-class="{active: activeMenu == 'hwmqual'}"><a ui-sref="resources.ResourcesList.HWMQual" ng-click="activeMenu = 'hwmqual'">HWM Qualities</a></li>
+                <li ng-class="{active: activeMenu == 'hwmty'}"><a ui-sref="resources.ResourcesList.HWMType" ng-click="activeMenu = 'hwmty'">HWM Types</a></li>
+                <li ng-class="{active: activeMenu == 'inscolcond'}"><a ui-sref="resources.ResourcesList.InstrCollCondition" ng-click="activeMenu = 'inscolcond'">Instrument Collection Conditions</a></li>
+                <li ng-class="{active: activeMenu == 'mark'}"><a ui-sref="resources.ResourcesList.Marker" ng-click="activeMenu = 'mark'">Markers</a></li>
+                <li ng-class="{active: activeMenu == 'netname'}"><a ui-sref="resources.ResourcesList.NetworkNames" ng-click="activeMenu = 'netname'">Network Names</a></li>
+                <li ng-class="{active: activeMenu == 'opqual'}"><a ui-sref="resources.ResourcesList.OPquality" ng-click="activeMenu = 'opqual'">Objective Point Qualities</a></li>
+                <li ng-class="{active: activeMenu == 'optype'}"><a ui-sref="resources.ResourcesList.OPType" ng-click="activeMenu = 'optype'">Objective Point Types</a></li>
+                <li ng-class="{active: activeMenu == 'sensbrand'}"><a ui-sref="resources.ResourcesList.SensorBrand" ng-click="activeMenu = 'sensbrand'">Sensor Brands</a></li>
+                <li ng-class="{active: activeMenu == 'deptype'}"><a ui-sref="resources.ResourcesList.SenDepType" ng-click="activeMenu = 'deptype'">Sensor Deployment Types</a></li>
+                <li ng-class="{active: activeMenu == 'stattype'}"><a ui-sref="resources.ResourcesList.StatusType" ng-click="activeMenu = 'stattype'">Sensor Status Types</a></li>
+                <li ng-class="{active: activeMenu == 'senstype'}"><a ui-sref="resources.ResourcesList.SensorType" ng-click="activeMenu = 'senstype'">Sensor Types</a></li>
+                <li ng-class="{active: activeMenu == 'nettype'}"><a ui-sref="resources.ResourcesList.NetworkType" ng-click="activeMenu = 'nettype'">Site Location Types in Network</a></li>
+                <li ng-class="{active: activeMenu == 'vertcolmeth'}"><a ui-sref="resources.ResourcesList.VertCollMethod" ng-click="activeMenu = 'vertcolmeth'">Vertical Collection Methods</a></li>
+                <li ng-class="{active: activeMenu == 'vertdat'}"><a ui-sref="resources.ResourcesList.VertDatum" ng-click="activeMenu = 'vertdat'">Vertical Datums</a></li>
+</ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="page-content">
+                <div ui-view></div>                
+            </div>
+        </div>
+    </div>
+</div>

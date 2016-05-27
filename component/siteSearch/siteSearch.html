@@ -1,0 +1,128 @@
+<div class="page-padding">
+
+    <h3 class="page-heading">Site Search - For {{sessionEvent}}</h3>
+
+    <hr />
+
+    <p>Search for Sites by one or more parameters. Clicking Search with no parameters set will return all sites.</p>
+
+    <form name="siteSearchForm" class="wim-form border-bottom">
+        <div class="form-item item-20">
+            <label for="EVENT_ID">Events:</label>
+            <div class="form-item-value">{{sessionEvent}}</div>
+        </div>
+        
+        <div class="form-item item-20">
+            <label for="EVENT_ID">States:</label>
+            <div isteven-multi-select
+                 input-model="states"
+                 output-model="Chosen.state"
+                 button-label="STATE_NAME"
+                 item-label="STATE_NAME"
+                 max-height="300px"
+                 on-item-click="stateClick(data)"
+                 tick-property="selected"
+                 helper-elements="filter">
+
+            </div>
+        </div>
+        
+        <div class="form-item item-20">
+            <label for="EVENT_ID">Sensor Types:</label>
+            <select id="SENSOR_TYPE_ID" name="SENSOR_TYPE_ID" ng-model="Chosen.sensor"
+                    ng-options="s.SENSOR_TYPE_ID as s.SENSOR for s in senTypes | orderBy: 'SENSOR'">
+                <option value=""></option>
+            </select>
+        </div>
+        
+        <div class="form-item item-20">
+            <label for="EVENT_ID">Network Names:</label>
+            <select id="NETWORK_NAME_ID" name="NETWORK_NAME_ID" ng-model="Chosen.network"
+                    ng-options="n.NETWORK_NAME_ID as n.NAME for n in netNames | orderBy: 'NAME'">
+                <option value=""></option>
+            </select>
+        </div>
+
+
+        <div class="form-item item-20">
+            <div class="checkbox-inline">
+                <input type="checkbox" ng-model="checkboxModel.hwmOnly" ng-true-value="'1'" ng-false-value="'0'" />
+                <label for="EVENT_ID">HWM Only Sites</label>
+            </div>
+            <div class="checkbox-inline">
+                <input type="checkbox" ng-model="checkboxModel.senOnly" ng-true-value="'1'" ng-false-value="'0'" />
+                <label for="EVENT_ID">Sensor Only Sites</label>
+            </div>
+            <div class="checkbox-inline">
+                <input type="checkbox" ng-model="checkboxModel.rdgOnly" ng-true-value="'1'" ng-false-value="'0'" />
+                <label for="EVENT_ID">RDG Only Sites</label>
+            </div>
+            <div class="checkbox-inline">
+                <input type="checkbox" ng-model="checkboxModel.opDefined" ng-true-value="'1'" ng-false-value="'0'" />
+                <label for="EVENT_ID">Has OP Defined</label>
+            </div>
+        </div>
+
+
+        <div class="form-item item-25">
+            <button type="button" class="btn-wim btn-blue" ng-click="searchSites()">Search</button>
+        </div>
+
+
+        <div class="form-item item-25">
+            <button type="button" class="btn-wim btn-purple" ng-click="clearFilters()">Clear Filters</button>
+        </div>
+
+
+    </form>
+
+
+    <div ng-if="showHWMbox" class="results-box rb-50">
+        <h3 class="results-box-title">Unapproved Site HWMs</h3>
+        <ul ng-show="unApprovedHWMs.length > 0">
+            <li style="list-style:none;" ng-repeat="h in unApprovedHWMs | orderBy: 'SITE_ID'">
+                <span><a ui-sref="site.dashboard({id: h.SITE_ID})">{{h.SITE_NO}}</a>: {{h.HWM_ID}} ({{h.ELEV_FT}} ft.)</span>
+            </li>
+        </ul>
+        <div ng-show="unApprovedHWMs.length == 0" class="results-box-no-result">
+            No HWMs returned from query.
+        </div>
+    </div>
+
+    <div ng-show="siteResponse" class="results-box rb-100">
+        <h3 class="results-box-title">Sites:</h3>
+        <script>
+            var sortingOrder = 'SITE_NO';
+        </script>
+        <table ng-show="siteList.length > 0" class="table table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th class="SITE_NO">Site Number&nbsp;<a ng-click="sort_by('SITE_NO')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                    <th class="Description">Description&nbsp;<a ng-click="sort_by('Description')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                    <th class="County">County&nbsp;<a ng-click="sort_by('County')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                    <th class="State">State&nbsp;<a ng-click="sort_by('State')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                    <th class="Networks">Network&nbsp;<a ng-click="sort_by('Networks')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                    <th class="RecentOP">OP&nbsp;<a ng-click="sort_by('RecentOP')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                    <th class="Events">All Events using Site&nbsp;<a ng-click="sort_by('Events')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="s in siteList | orderBy:sortingOrder:reverse">
+                    <td><a ui-sref="site.dashboard({id: s.SITE_ID})">{{s.SITE_NO}}</a></td>
+                    <td>{{s.Description}}</td>
+                    <td>{{s.County}}</td>
+                    <td>{{s.State}}</td>
+                    <td><span ng-repeat="net in s.Networks">{{net.NAME}}</span></td>
+                    <td ng-if="s.RecentOP">{{s.RecentOP.NAME}}, Established: {{s.RecentOP.DATE_ESTABLISHED | date:'MM/dd/yyyy'}}</td>
+                    <td ng-if="!s.RecentOP"></td>
+                    <td><span ng-repeat="ev in s.Events">{{ev.EVENT_NAME}}<br/></span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div ng-show="siteList.length == 0">
+            <span>No Sites returned from query.</span>
+        </div>
+    </div>
+
+</div>

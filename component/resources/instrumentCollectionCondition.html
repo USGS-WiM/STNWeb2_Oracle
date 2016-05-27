@@ -1,0 +1,85 @@
+<div ng-if="accountRole == 'Admin'">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width:0"></th>
+                <th>Instrument Collection Condition</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="icc in instColCondList | orderBy: 'CONDITION'">
+                <td style="white-space: nowrap">
+                    <!-- form -->
+                    <form editable-form name="ICCrowform" onaftersave="saveInstColCond($data, icc.ID)" ng-show="ICCrowform.$visible" class="form-buttons form-inline" shown="inserted == icc">
+                        <button type="submit" ng-disabled="ICCrowform.$waiting" class="btn btn-primary">
+                            save
+                        </button>
+                        <button type="button" ng-disabled="ICCrowform.$waiting" ng-click="ICCrowform.$cancel()" class="btn btn-default">
+                            cancel
+                        </button>
+                    </form>
+                    <div class="buttons" ng-show="!ICCrowform.$visible">
+                        <button class="btn btn-primary" ng-click="ICCrowform.$show()">edit</button>
+                        <button class="btn btn-danger" ng-click="deleteInstColCond(icc)">del</button>
+                    </div>
+                </td>
+                <td>
+                    <div style="display:none"><span editable-text="icc.ID" e-form="ICCrowform" e-name="ID">{{icc.ID}}</span></div>
+                    <span editable-text="icc.CONDITION" e-name="CONDITION" e-form="ICCrowform">{{ icc.CONDITION || '' }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    <button ng-show="addICCButtonShowing" class="btn btn-primary" ng-click="showAddICCClicked()">Add New Instrument Collection Condition</button>
+
+    <div ng-show="showAddICCForm">
+        <form class="form-horizontal" name="lookupForm.iccFm">
+            <fieldset>
+
+                <div class="form-group required">
+                    <label class="col-md-3 control-label req" for="STATUS">Instrument Collection Condition:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="CONDITION" name="CONDITION" type="text" placeholder="" ng-model="newICC.CONDITION" required />
+                    </div>
+                </div>
+
+
+                <!--submit button-->
+                <div class="form-group">
+                    <div class="col-md-2 col-md-offset-2">
+                        <span>
+                            <button class="btn btn-primary" ng-click="AddInstColCond(lookupForm.iccFm.$valid, newICC)">
+                                Add
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form><button class="btn btn-default center-block" style="margin-top:-48px;" ng-click="NeverMindICC()">
+            Never Mind
+        </button>
+    </div>
+</div><!--end admin view-->
+<div ng-if="accountRole !='Admin'">
+    <script>
+        var sortingOrder = 'CONDITION';
+    </script>
+
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th class="CONDITION">Instrument Collection Condition&nbsp;<a ng-click="sort_by('CONDITION')"><i class="glyphicon glyphicon-sort"></i></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="icc in instColCondList | orderBy:sortingOrder:reverse">
+                <td>{{ icc.CONDITION || '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

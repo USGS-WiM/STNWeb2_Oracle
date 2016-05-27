@@ -1,0 +1,304 @@
+<!--<div>
+    <h2 style="margin-top:0">Site {{aSite.SITE_NO}}</h2>
+</div>
+<hr />-->
+
+<uib-accordion close-others="false">
+
+    <uib-accordion-group is-open="status.siteOpen">
+        <uib-accordion-heading>
+            <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.siteOpen, 'glyphicon-chevron-right': !status.siteOpen}"></i>
+            <span>Site</span>
+        </uib-accordion-heading>
+        <button type="button" ng-if="aSite.SITE_ID != undefined" class="btn btn-primary pull-right" ng-click="openSiteCreate()">Edit Site</button>
+        <button type="button" ng-if="aSite.SITE_ID == undefined" class="btn btn-primary pull-right" ng-click="openSiteCreate()">Create Site</button>
+        <div ng-if="aSite.SITE_ID != undefined">
+            <form class="form-horizontal">
+                <fieldset>
+                    <!--Site Description*-->
+                    <div class="col-md-12">
+                        <div class="col-md-4"><label>Site Description:</label></div>
+                        <div class="col-md-7"><span>{{aSite.SITE_DESCRIPTION}}</span></div>
+                    </div>
+
+                    <!--Internal Notes-->
+                    <div class="col-md-12">
+                        <div class="col-md-4"><label>Internal Notes:</label></div>
+                            <div class="col-md-7">
+                                <span ng-if="aSite.SITE_NOTES != undefined">{{aSite.SITE_NOTES}}</span>
+                                <span ng-if="aSite.SITE_NOTES == undefined">---</span>
+                            </div>
+                        </div>
+
+                    <!--Latitude*-->
+                    <div class="col-md-12">
+                        <div class="col-md-4"><label>Latitude:</label></div>
+                            <div class="col-md-7"><span>{{aSite.LATITUDE_DD}}</span></div>
+                        </div>
+
+                        <!--Longitude*-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Longitude:</label></div>
+                            <div class="col-md-7"><span>{{aSite.LONGITUDE_DD}}</span></div>
+                        </div>
+
+                        <!--Horizontal Datum*-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Horizontal Datum:</label></div>
+                            <div class="col-md-7"><span>{{aSite.HorizontalDatum}}</span></div>
+                        </div>
+
+                        <!--Horizontal Collection Method*-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Horizontal Collection Method:</label></div>
+                            <div class="col-md-7"><span>{{aSite.HorizontalCollectMethod}}</span></div>
+                        </div>
+
+                        <!--Address-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Address:</label></div>
+                            <div class="col-md-7"><span>{{aSite.ADDRESS || "---"}}</span></div>
+                        </div>
+
+                        <!--City-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>City:</label></div>
+                            <div class="col-md-7"><span>{{aSite.CITY || "---"}}</span></div>
+                        </div>
+
+                        <!--State*-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>State:</label></div>
+                            <div class="col-md-7"><span>{{aSite.STATE || "---"}}</span></div>
+                        </div>
+
+                        <!--Zip-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Zip:</label></div>
+                            <div class="col-md-7"><span>{{aSite.ZIP || "---"}}</span></div>
+                        </div>
+
+                        <!--County*-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>County:</label></div>
+                            <div class="col-md-7"><span>{{aSite.COUNTY || "---"}}</span></div>
+                        </div>
+
+                        <!--Waterbody*-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Waterbody:</label></div>
+                            <div class="col-md-7"><span>{{aSite.WATERBODY}}</span></div>
+                        </div>
+
+                        <!--Drainage Area-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Drainage Area (sq mi):</label></div>
+                            <div class="col-md-7"><span>{{aSite.DRAINAGE_AREA_SQMI || "---"}}</span></div>
+                        </div>
+
+                        <!--Station ID for USGS gage-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Station ID for USGS gage:</label></div>
+                            <div class="col-md-7"><span>{{aSite.USGS_SID || "---"}}</span></div>
+                        </div>
+
+                        <!--Station ID for NOAA gage-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Station ID for NOAA gage:</label></div>
+                            <div class="col-md-7"><span>{{aSite.NOAA_SID || "---"}}</span></div>
+                        </div>
+
+                        <!--Other Station ID-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Other Station ID:</label></div>
+                            <div class="col-md-7"><span>{{aSite.OTHER_SID || "---"}}</span></div>
+                        </div>
+
+                        <!--Safety Notes-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Safety Notes:</label></div>
+                            <div class="col-md-7">
+                                <span ng-if="aSite.SAFETY_NOTES != undefined">{{aSite.SAFETY_NOTES}}</span>
+                                <span ng-if="aSite.SAFETY_NOTES == undefined">---</span>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <!--Site Housing section-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Site Housing(s):</label></div>
+                            <div ng-show="showSiteHouseTable">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-sm-3">House Type</th>
+                                            <th class="col-sm-1">Housing Length (ft)</th>
+                                            <th class="col-sm-3">Housing Material</th>
+                                            <th class="col-sm-3">Housing Notes</th>
+                                            <th class="col-sm-1">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="house in thisSiteHouseTypeModel">
+                                            <td>{{house.TYPE_NAME}}<input type="hidden" ng-model="house.HOUSING_TYPE_ID" /><input type="hidden" ng-model="house.SITE_HOUSING_ID" /></td>
+                                            <td>{{house.LENGTH}}</td>
+                                            <td>{{house.MATERIAL}}</td>
+                                            <td>{{house.NOTES}}</td>
+                                            <td>{{house.AMOUNT}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- end panel-body
+        
+                        <hr />
+                        <!--Priority-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Priority:</label></div>
+                            <div class="col-md-7"><span>{{aSite.PriorityName}}</span></div>
+                        </div>
+                        <!--Network Type-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Site Location Type in the Network:</label></div>
+                            <div class="col-md-7">
+                                <ul style="padding-left:0">
+                                    <li style="list-style:none;" ng-repeat="nt in siteNetworkTypes">
+                                        <span>{{nt}}</span>
+                                    </li>
+                                </ul>
+                                <span ng-if="siteNetworkTypes.length < 1">---</span>
+                            </div>
+                        </div>
+                        <!--Network NAME-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Network Name:</label></div>
+                            <div class="col-md-7">
+                                <ul style="padding-left:0">
+                                    <li style="list-style:none;" ng-repeat="nn in siteNetworkNames">
+                                        <span>{{nn}}</span>
+                                    </li>
+                                </ul>
+                                <span ng-if="siteNetworkNames.length < 1">---</span>
+                            </div>
+                        </div>
+                        <!--Zone-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Zone:</label></div>
+                            <div class="col-md-7"><span>{{aSite.ZONE || "---"}}</span></div>
+                        </div>
+
+                        <!--Sensor Not Appropriate-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Checked if Sensor is not Appropriate here:</label></div>
+                            <div class="col-md-7">
+                                <input type="checkbox" disabled="disabled" name="SENSOR_NOT_APPROPRIATE" ng-model="aSite.SENSOR_NOT_APPROPRIATE" ng-true-value="1" ng-false-value="0" />
+                            </div>
+                        </div>
+
+                        <!--Permanent Sensor Housing?-->
+                        <div class="col-md-12 sensorInfo" ng-class="{darkClass:disableSensorParts}">
+                            <div class="col-md-4"><label>Permanent Sensor Housing Installed?</label></div>
+                            <div class="col-md-7"><span>{{aSite.IS_PERMANENT_HOUSING_INSTALLED || "---"}}</span></div>
+                        </div>
+
+                        <!--Site creator-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Site Creator:</label></div>
+                            <div class="col-md-7">
+                                <span>{{aSite.Creator || "---"}}</span>
+                            </div>
+                        </div>
+                        <hr />
+                        <!--start Landowner contact area-->
+                        
+                        <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <div class="col-md-4"><label>Land Owner Information:</label></div>
+                            </div>
+                        <div ng-show="addLandowner">
+                            <!--First Name:-->
+                            <div class="col-md-12">
+                                <div class="col-md-4"><label>First Name:</label></div>
+                                <div class="col-md-7"><span>{{landowner.FNAME || "---"}}</span></div>
+                            </div>
+                            <!--Last Name:-->
+                            <div class="col-md-12">
+                                <div class="col-md-4"><label>Last Name:</label></div>
+                                <div class="col-md-7"><span>{{landowner.LNAME || "---"}}</span></div>
+                            </div>
+                            <!--Affiliation/Title:-->
+                            <div class="col-md-12">
+                                <div class="col-md-4"><label>Affiliation/Title:</label></div>
+                                <div class="col-md-7"><span>{{landowner.TITLE || "---"}}</span></div>
+                            </div>
+                            <!--Address:-->
+                            <div class="col-md-12">
+                                <div class="col-md-4"><label>Address:</label></div>
+                                <div class="col-md-7"><span>{{landowner.ADDRESS || "---"}}</span></div>
+                            </div>
+                            <!--City:-->
+                            <div class="col-md-12">
+                                <div class="col-md-4"><label>City:</label></div>
+                                <div class="col-md-7"><span>{{landowner.CITY || "---"}}</span></div>
+                            </div>
+                            <!--State-->
+                            <div class="col-md-12">
+                                <div class="col-md-4"><label>State:</label></div>
+                                <div class="col-md-7"><span>{{landowner.STATE || "---"}}</span></div>
+                            </div>
+                            <!--Zip:-->
+                            <div class="col-md-12">
+                                <div class="col-md-4"><label>Zip:</label></div>
+                                <div class="col-md-7"><span>{{landowner.ZIP || "---"}}</span></div>
+                            </div>
+                            <!--Primary Phone:-->
+                            <div class="col-md-12">
+                                <div class="col-md-4"><label>Primary Phone:</label></div>
+                                <div class="col-md-7"><span>{{landowner.PRIMARYPHONE || "---"}}</span></div>
+                            </div>
+                            <!--Secondary Phone:-->
+                            <div class="col-md-12">
+                                <div class="col-md-4"><label>Secondary Phone:</label></div>
+                                <div class="col-md-7"><span>{{landowner.SECONDARYPHONE || "---"}}</span></div>
+                            </div>
+                            <!--Email:-->
+                            <div class="col-md-12">
+                                <div class="col-md-4"><label>Email:</label></div>
+                                <div class="col-md-7"><span>{{landowner.EMAIL || "---"}}</span></div>
+                            </div>
+                        </div>
+                        <div ng-show="!addLandowner">
+                            <div class="col-md-12">
+                                <div class="col-md-4"><label></label></div>
+                                <div class="col-md-7"><span>No land owner added.</span></div>
+                            </div>
+                        </div></div></div>
+                        <hr />
+
+                        <br clear="all" />
+                        <!--end Landowner contact area-->
+                        <!--Access Permission Granted-->
+                        <div class="col-md-12">
+                            <div class="col-md-4"><label>Access Permission Granted:</label></div>
+                            <div class="col-md-7"><span>{{aSite.ACCESS_GRANTED || "---"}}</span></div>
+                        </div>
+</fieldset>
+            </form>
+        </div>
+
+    </uib-accordion-group>
+</uib-accordion>
+
+<style type="text/css">
+    .darkClass {
+        filter: alpha(opacity=50); /* IE */
+        opacity: 0.5; /* Safari, Opera */
+        -moz-opacity: 0.50; /* FireFox */
+        z-index: 20;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+</style>

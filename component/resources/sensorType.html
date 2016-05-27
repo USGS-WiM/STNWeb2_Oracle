@@ -1,0 +1,104 @@
+<div ng-if="accountRole == 'Admin'">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width:0"></th>
+                <th>Sensor Type</th>
+                <th>Related Deployment Type(s)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="SenT in formattedSensTypeList | orderBy: 'SENSOR'">
+                <td style="white-space: nowrap">
+                    <!-- form -->
+                    <form editable-form name="SENtrowform" onaftersave="saveSensorType($data, SenT.SENSOR_TYPE_ID)" ng-show="SENtrowform.$visible" class="form-buttons form-inline" shown="inserted == SenT">
+                        <button type="submit" ng-disabled="SENtrowform.$waiting" class="btn btn-primary">
+                            save
+                        </button>
+                        <button type="button" ng-disabled="SENtrowform.$waiting" ng-click="SENtrowform.$cancel()" class="btn btn-default">
+                            cancel
+                        </button>
+                    </form>
+                    <div class="buttons" ng-show="!SENtrowform.$visible">
+                        <button class="btn btn-primary" ng-click="SENtrowform.$show()">edit</button>
+                        <button class="btn btn-danger" ng-click="deleteSensorType(SenT)">del</button>
+                    </div>
+                </td>
+                <td>
+                    <div style="display:none"><span editable-text="SenT.SENSOR_TYPE_ID" e-form="SENtrowform" e-name="SENSOR_TYPE_ID">{{SenT.SENSOR_TYPE_ID}}</span></div>
+                    <span editable-text="SenT.SENSOR" e-name="SENSOR" e-form="SENtrowform">{{ SenT.SENSOR || '' }}</span>
+                </td>
+                <td>
+                    <span editable-checklist="SenT.DepTypes" e-name="DepTypes" e-form="SENtrowform" e-ng-click="checkListCheck(SenT.DepTypes, $data)" e-ng-options="d.DEPLOYMENT_TYPE_ID as d.METHOD for d in depTypeList">
+                        {{showDepTypes(SenT)}}
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <hr />
+
+    <button ng-show="addSenTButtonShowing" class="btn btn-primary" ng-click="showAddSenTClicked()">Add New Sensor Type</button>
+
+    <div ng-show="showAddSenTForm">
+        <form class="form-horizontal" name="lookupForm.sensTFm">
+            <fieldset>
+
+                <div class="form-group required">
+                    <label class="col-md-3 control-label req" for="STATUS">Sensor Type:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="SENSOR" name="SENSOR" type="text" placeholder="" ng-model="newSenT.SENSOR" required />
+                    </div>
+                </div>
+
+                <div class="form-group required">
+                    <label class="col-md-3 control-label req" for="STATUS">Related Deployment Type(s) (if any):</label>
+                    <div class="col-md-6">
+                        <ul>
+                            <li style="list-style:none;" ng-repeat="dt in depTypeList">
+                                <input type="checkbox" name="allDepTypes" ng-model="dt.selected" ng-click="addDepTypeToNewSenT(dt)" ng-value="{{dt.DEPLOYMENT_TYPE_ID}}" />
+                                <span>{{ dt.METHOD }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!--submit button-->
+                <div class="form-group">
+                    <div class="col-md-2 col-md-offset-2">
+                        <span>
+                            <button class="btn btn-primary" ng-click="AddSensorType(lookupForm.sensTFm.$valid, newSenT)">
+                                Add
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form><button class="btn btn-default center-block" style="margin-top:-48px;" ng-click="NeverMindSenT()">
+            Never Mind
+        </button>
+    </div>
+</div><!--end admin view-->
+
+<div ng-if="accountRole !='Admin'">
+    <script>
+        var sortingOrder = 'SENSOR';
+    </script>
+
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th class="SENSOR">Sensor Type&nbsp;<a ng-click="sort_by('SENSOR')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                <th>Related Deployment Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="SenT in formattedSensTypeList | orderBy:sortingOrder:reverse">
+                <td>{{ SenT.SENSOR || '' }}</td>
+                <td>{{ SenT.DepMETHODStrings || ''}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

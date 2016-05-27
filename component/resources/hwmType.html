@@ -1,0 +1,85 @@
+<div ng-if="accountRole == 'Admin'">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width:0"></th>
+                <th>HWM Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="hwmt in hwmTypeList | orderBy: 'HWM_TYPE'">
+                <td style="white-space: nowrap">
+                    <!-- form -->
+                    <form editable-form name="HWMTrowform" onaftersave="saveHwmType($data, hwmt.HWM_TYPE_ID)" ng-show="HWMTrowform.$visible" class="form-buttons form-inline" shown="inserted == hwmt">
+                        <button type="submit" ng-disabled="HWMTrowform.$waiting" class="btn btn-primary">
+                            save
+                        </button>
+                        <button type="button" ng-disabled="HWMTrowform.$waiting" ng-click="HWMTrowform.$cancel()" class="btn btn-default">
+                            cancel
+                        </button>
+                    </form>
+                    <div class="buttons" ng-show="!HWMTrowform.$visible">
+                        <button class="btn btn-primary" ng-click="HWMTrowform.$show()">edit</button>
+                        <button class="btn btn-danger" ng-click="deleteHwmType(hwmt)">del</button>
+                    </div>
+                </td>
+                <td>
+                    <div style="display:none"><span editable-text="hwmt.HWM_TYPE_ID" e-form="HWMTrowform" e-name="HWM_TYPE_ID">{{hwmt.HWM_TYPE_ID}}</span></div>
+                    <span editable-text="hwmt.HWM_TYPE" e-name="HWM_TYPE" e-form="HWMTrowform">{{ hwmt.HWM_TYPE || '' }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    <button ng-show="addHWMTButtonShowing" class="btn btn-primary" ng-click="showAddHWMTClicked()">Add New HWM Type</button>
+
+    <div ng-show="showAddHWMTForm">
+        <form class="form-horizontal" name="lookupForm.hwmTypeFm">
+            <fieldset>
+
+                <div class="form-group required">
+                    <label class="col-md-3 control-label req" for="HWM_TYPE">HWM Type:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="HWM_TYPE" name="HWM_TYPE" type="text" placeholder="" ng-model="newHWMT.HWM_TYPE" required />
+                    </div>
+                </div>
+
+
+                <!--submit button-->
+                <div class="form-group">
+                    <div class="col-md-2 col-md-offset-2">
+                        <span>
+                            <button class="btn btn-primary" ng-click="AddHwmType(lookupForm.hwmTypeFm.$valid, newHWMT)">
+                                Add
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form><button class="btn btn-default center-block" style="margin-top:-48px;" ng-click="NeverMindHWMT()">
+            Never Mind
+        </button>
+    </div>
+</div><!--end admin view-->
+<div ng-if="accountRole !='Admin'">
+    <script>
+        var sortingOrder = 'HWM_TYPE';
+    </script>
+
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th class="HWM_TYPE">HWM Type&nbsp;<a ng-click="sort_by('HWM_TYPE')"><i class="glyphicon glyphicon-sort"></i></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="hwmt in hwmTypeList | orderBy:sortingOrder:reverse">
+                <td>{{ hwmt.HWM_TYPE || '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

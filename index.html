@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <link rel="icon" href="data:;base64,="><!--<link rel="icon" href="data:;base64,iVBORw0KGgo=">-->
+    <title>STNWeb</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/angular-busy.css">
+    <link rel="stylesheet" href="bower_components/bootstrap-multiselect.css">
+    <link rel="stylesheet" href="bower_components/bootstrap-table.css">
+    <link rel="stylesheet" href="bower_components/bootstrap-theme.css">
+    <link rel="stylesheet" href="bower_components/bootstrap.css">
+    <link rel="stylesheet" href="bower_components/datetimepicker.css">
+    <link rel="stylesheet" href="bower_components/isteven-multi-select.css">
+    <link rel="stylesheet" href="bower_components/l.geosearch.css">
+    <link rel="stylesheet" href="bower_components/ladda.min.css">
+    <link rel="stylesheet" href="bower_components/lato.css">
+    <link rel="stylesheet" href="bower_components/leaflet.css">
+    <link rel="stylesheet" href="bower_components/leaflet.label.css">
+    <link rel="stylesheet" href="bower_components/mobile-angular-ui-base.css">
+    <link rel="stylesheet" href="bower_components/mobile-angular-ui-desktop.css">
+    <link rel="stylesheet" href="bower_components/mobile-angular-ui-hover.css">
+    <link rel="stylesheet" href="bower_components/ng-tags-input.min.css">
+    <link rel="stylesheet" href="bower_components/select.css">
+    <link rel="stylesheet" href="bower_components/toaster.css">
+    <link rel="stylesheet" href="bower_components/toastr.css">
+    <link rel="stylesheet" href="bower_components/wimLegend.css">
+    <link rel="stylesheet" href="bower_components/xeditable.css">
+    <!-- endinject -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/bootstrap_3.1.1.css">
+    <link rel="stylesheet" href="css/stn.css">
+    <!-- endinject -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery.js"></script>
+    <script src="bower_components/angular.js"></script>
+    <script src="bower_components/leaflet-src.js"></script>
+    <script src="bower_components/esri-leaflet.js"></script>
+    <script src="bower_components/angular-leaflet-directive.js"></script>
+    <script src="bower_components/directives.module.js"></script>
+    <script src="bower_components/service.module.js"></script>
+    <script src="bower_components/RequestInfo.js"></script>
+    <script src="bower_components/HTTPServiceBase.js"></script>
+    <script src="bower_components/Delegate.js"></script>
+    <script src="bower_components/RequestTransform.js"></script>
+    <script src="bower_components/EventManager.js"></script>
+    <script src="bower_components/EventArgs.js"></script>
+    <script src="bower_components/wimLegend.js"></script>
+    <script src="bower_components/angular-animate.js"></script>
+    <script src="bower_components/angular-busy.js"></script>
+    <script src="bower_components/angular-cookies.js"></script>
+    <script src="bower_components/angular-filter.min.js"></script>
+    <script src="bower_components/angular-input-modified.js"></script>
+    <script src="bower_components/angular-resource.js"></script>
+    <script src="bower_components/angular-route.js"></script>
+    <script src="bower_components/angular-spinners.min.js"></script>
+    <script src="bower_components/angular-ui-router.js"></script>
+    <script src="bower_components/bootstrap-multiselect.js"></script>
+    <script src="bower_components/bootstrap-table.js"></script>
+    <script src="bower_components/bootstrap.js"></script>
+    <script src="bower_components/checklist-model.js"></script>
+    <script src="bower_components/datetimepicker.js"></script>
+    <script src="bower_components/event.js"></script>
+    <script src="bower_components/EventHandler.js"></script>
+    <script src="bower_components/indeterminate.js"></script>
+    <script src="bower_components/index.js"></script>
+    <script src="bower_components/isteven-multi-select.js"></script>
+    <script src="bower_components/l.control.geosearch.js"></script>
+    <script src="bower_components/l.geosearch.provider.bing.js"></script>
+    <script src="bower_components/l.geosearch.provider.esri.js"></script>
+    <script src="bower_components/l.geosearch.provider.google.js"></script>
+    <script src="bower_components/l.geosearch.provider.openstreetmap.js"></script>
+    <script src="bower_components/ladda-angular.js"></script>
+    <script src="bower_components/ladda.min.js"></script>
+    <script src="bower_components/leaflet.label.js"></script>
+    <script src="bower_components/mask.js"></script>
+    <script src="bower_components/mobile-angular-ui.gestures.js"></script>
+    <script src="bower_components/mobile-angular-ui.js"></script>
+    <script src="bower_components/ng-file-upload.js"></script>
+    <script src="bower_components/ng-tags-input.min.js"></script>
+    <script src="bower_components/scrollpoint.js"></script>
+    <script src="bower_components/select.js"></script>
+    <script src="bower_components/spin.js"></script>
+    <script src="bower_components/toaster.js"></script>
+    <script src="bower_components/toastr.js"></script>
+    <script src="bower_components/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/ui-scroll.js"></script>
+    <script src="bower_components/uploader.js"></script>
+    <script src="bower_components/validate.js"></script>
+    <script src="bower_components/xeditable.js"></script>
+    <!-- endinject -->
+    <!-- inject:js -->
+    <script src="component/STNCtrl.js"></script>
+    <script src="shared/directives/STNDirectives.js"></script>
+    <script src="component/siteSearch/siteSearchCtrl.js"></script>
+    <script src="component/site/siteModalCtrl.js"></script>
+    <script src="component/site/siteMapCtrl.js"></script>
+    <script src="component/site/siteCtrl.js"></script>
+    <script src="component/site/quickCreateCtrl.js"></script>
+    <script src="component/reporting/submitReportCtrl.js"></script>
+    <script src="component/reporting/reportModalCtrl.js"></script>
+    <script src="component/reporting/reportingDashboardCtrl.js"></script>
+    <script src="component/reporting/reportingCtrl.js"></script>
+    <script src="component/reporting/projectAlertModalCtrl.js"></script>
+    <script src="component/reporting/confirmReportModalCtrl.js"></script>
+    <script src="component/settings/settingsCtrl.js"></script>
+    <script src="component/sensor/sensorModalCtrl.js"></script>
+    <script src="component/sensor/sensorCtrl.js"></script>
+    <script src="component/resources/resourcesCtrl.js"></script>
+    <script src="component/objectivePoint/objectivePointModalCtrl.js"></script>
+    <script src="component/objectivePoint/objectivePointCtrl.js"></script>
+    <script src="component/peak/peakModalCtrl.js"></script>
+    <script src="component/peak/peakCtrl.js"></script>
+    <script src="component/map/MapSiteInfoController.js"></script>
+    <script src="component/map/MapSensorProposeController.js"></script>
+    <script src="component/map/MapPeaksController.js"></script>
+    <script src="component/map/MapFiltersController.js"></script>
+    <script src="component/map/mapCtrl.js"></script>
+    <script src="component/member/memberInfoCtrl.js"></script>
+    <script src="component/member/memberCtrl.js"></script>
+    <script src="component/main/mainCtrl.js"></script>
+    <script src="component/logInOut/logInOutCtrl.js"></script>
+    <script src="component/approval/approvalCtrl.js"></script>
+    <script src="component/hwm/hwmModalCtrl.js"></script>
+    <script src="component/hwm/hwmCtrl.js"></script>
+    <script src="component/file/fileModalCtrl.js"></script>
+    <script src="component/file/fileCtrl.js"></script>
+    <script src="component/help/helpCtrl.js"></script>
+    <script src="component/event/eventSessionModalCtrl.js"></script>
+    <script src="component/event/eventSessionCtrl.js"></script>
+    <script src="component/event/eventInfoCtrl.js"></script>
+    <script src="component/event/eventCtrl.js"></script>
+    <script src="services/STNResource.js"></script>
+    <script src="services/businessServices.js"></script>
+    <script src="component/ModalsCtrl.js"></script>
+    <script src="component/jquery.inputmask.bundle.js"></script>
+    <script src="app.js"></script>
+    <!-- endinject -->
+
+
+
+    <!--<script src="app.js"></script>-->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+    <!-- Not working in Bower -->
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <script src="bower_components/angular-ui-router.js"></script>
+
+
+
+</head>
+
+<body ng-app="app" ng-strict-di>
+
+    <!--HEADER START navCtrl-->
+    <div ng-controller="mainCtrl" class="app-nav">
+        <h2 class="testing-alert"><b>TESTING ONLY! DATA WILL BE OVERRIDDEN FOLLOWING TESTING PHASE</b></h2>
+        <h1 class="nav-header">Short-Term Network<span ng-if="thisPage"> - {{thisPage}}</span></h1>
+
+        <button type="button" ng-show="isAuth.val" ng-controller="eventSessionCtrl" class="btn-wim btn-sm btn-white nav-change-session" ng-click="openEventModal()">
+            <span ng-show="!sessionEvent">Choose Event</span>
+            <span ng-show="sessionEvent">Change Event</span>
+        </button>
+        <div ng-show="isAuth.val"  class="nav-session-label" ng-if="sessionTeam || sessionEvent">
+            <span ng-if="sessionTeam">{{sessionTeam}}<br></span>
+            <span ng-if="sessionEvent">{{sessionEvent}}</span>
+        </div>
+
+        <div class="nav-userctrl" ng-show="isAuth.val">
+            <span>Welcome, <a ui-sref="members.MemberInfo({id: userID})">{{usersName}}</a></span>
+            <button type="button" ng-controller="logoutCtrl" ng-click="logout()">LOG OFF</button>
+        </div>
+
+
+        <div class="subnav" ng-show="isAuth.val">
+            <ul class="subnav-links">
+                <li><a ng-class="{active: activeMenu == 'map'}" ui-sref="map" ng-click="activeMenu = 'map'">Map</a></li>
+                <li><a ng-class="{active: activeMenu == 'approval'}" ui-sref="approval" ng-click="activeMenu = 'approval'">Approval</a></li>
+                <li><a ng-class="{active: activeMenu == 'sites'}"  ui-sref="siteSearch" ng-click="activeMenu = 'sites'">Sites</a></li>
+                <li><a ng-class="{active: activeMenu == 'report'}"  ui-sref="reporting.reportDash" ng-click="activeMenu = 'report'">Reporting</a></li>
+                <li><a ng-class="{active: activeMenu == 'settings'}"  ui-sref="settings" ng-click="activeMenu = 'settings'">Settings</a></li>
+            </ul>
+            <div class="subnav-right" uib-dropdown is-open="status.isopen">
+                <button type="button" ng-click="goSearch = !goSearch" class="btn-subnav">
+                    <span ng-show="!goSearch">Search <i class="ion-search"></i></span>
+                    <span ng-show="goSearch">Cancel <i class="ion-close"></i></span>
+                </button>
+
+                <button id="single-button" type="button" class="btn-subnav" uib-dropdown-toggle ng-disabled="disabled">
+                    Create <span ng-show="status.isopen" class="ion-arrow-up-b"></span><span ng-show="!status.isopen" class="ion-arrow-down-b"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+                    <li role="menuitem"><a ui-sref="site.dashboard({id: 0})">Site</a></li>
+                    <li role="menuitem"><a ui-sref="quickCreate({id:'HWM'})">Quick HWM</a></li>
+                    <li role="menuitem"><a ui-sref="quickCreate({id:'Sensor'})">Quick Sensor</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <site-search  ng-show="goSearch"/>
+
+    </div>
+
+    <div ng-class="{'hidden': !stateIsLoading.showLoading}" class="page-loading">
+        <div class="loading">
+            <div class="loadingcontent"><p class="loadingspinner" style=""><img src="images/loading1.gif" /></p></div>
+        </div>
+    </div>
+
+    <div ui-view class="app-view"></div>
+
+</body>
+</html>
+<!-- MODALs for "are you sure you want to remove this thing (Keyword or URL) -->
+<script type="text/ng-template" id="removemodal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Remove {{what}}</h3>
+    </div>
+    <div class="modal-body">
+        <p>Are you sure you want to remove this {{what}}: <b>{{nameToRmv}}</b></p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" ng-click="ok()">OK</button>
+        <button type="button" class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+<!-- MODAL for Choose Event for this session -->
+<script type="text/ng-template" id="ChooseEvent.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Choose Event for this Session</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" name="eventForm" novalidate>
+            <fieldset>
+                <div>Filter Events by any of the following or just choose an event below:</div>
+                <div class="form-group">
+                    <label class="col-md-5 control-label">Events created on or after:</label>
+                    <div class="col-md-6 input-group" style="padding-right:14px;padding-left:14px">
+                        <input class="form-control dateInputStyle" name="ed" type="date" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.ed"
+                               show-weeks="false" ng-model="event.DATE" placeholder="No filter" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="open($event, 'ed')">
+                                <i class="glyphicon glyphicon-calendar" />
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-5 control-label">Event Type:</label>
+                    <div class="col-md-6">
+                        <select class="form-control" name="" ng-model="event.TYPE" ng-options="et.EVENT_TYPE_ID as et.TYPE for et in EventTypeList">
+                            <option value="">No filter</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-5 control-label">Event State:</label>
+                    <div class="col-md-6">
+                        <select class="form-control" name="" ng-model="event.STATE" ng-options="s.STATE_ABBREV as s.STATE_NAME for s in StateList">
+                            <option value="">No filter</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-4">
+                        <button class="btn btn-primary" type="button" ng-click="filterEvents()">Filter Events</button>
+                        <button class="btn btn-warning" type="button" ng-click="clearFilters()">Clear Filter</button>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="form-group">
+                    <label class="col-md-5 control-label">Events:</label>
+                    <div class="col-md-6">
+                        <select class="form-control" name="" ng-model="event.EventChosen"
+                                ng-options="e.EVENT_ID as e.EVENT_NAME for e in EventList | orderBy: 'EVENT_NAME'"
+                                <option value=""></option>
+                            </select>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" ng-click="setEvent()">Set event</button>
+        <button type="button" class="btn btn-warning" ng-click="clearEvent()">Clear event</button>
+        <button type="button" class="btn btn-warning" ng-click="close()">Cancel</button>
+    </div>
+
+</script>
+
+
+<script type="text/ng-template" id="saveReportModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Confirm</h3>
+    </div>
+    <div class="modal-body">
+        <p>Are you sure you want to save this Report without marking it complete?</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" ng-click="ok()">OK</button>
+        <button type="button" class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="FloodPA.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Project Alert Paragraph for a Flood Event</h3>
+    </div>
+    <div class="modal-body">
+        <div>
+            Flooding has or is occurring in {{ProjAlertParts.Report.STATE}} and is considered {MAJOR, MODERATE OR MINOR}. The areas with the most significant
+            flooding are {AREAS OF FLOODING}. {{ProjAlertParts.Event.EVENT_DESCRIPTION}}, {DAMAGES AND FATALITIES}. The USGS {{ProjAlertParts.Report.STATE}} Office has dispatched
+            {{ProjAlertParts.totYestFieldPers}} field staff to support high water data collection.  In addition, {{ProjAlertParts.totYestOfficPers}}
+            office staff are supporting the flood response.  Numerous contacts have been made with {EVENT CONTACTS}. These contacts were
+            primarily to give streamgage status updates and {OTHER REASONS}. {{ProjAlertParts.measureCts}} additional streamflow measurements
+            have been made in the {OTHER AREAS MEASUREMENTS TAKEN} area. {{ProjAlertParts.Report.GAGE_PEAK_RECORD}} streamgages have exceeded
+            previous period of record highs. Peaks at {NUMBER OF GAGES} streamgages rank in the top 5 for the period of record.  Preliminary
+            flood frequency estimates indicate {NUMBER OF GAGES} streamgages had Annual Exceedance Probabilities (AEP) less than 1% and
+            {NUMBER OF GAGES} streamgages had AEP between 2% and 1%.
+        </div>
+        <div style="margin-top:2em">Click <a href="http://water.usgs.gov/project_alert/alert_form.html" target="_blank">here</a> to open Project Alert in a new tab.</div>
+        <br clear="all" />
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" ng-click="ok()">OK</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="HurricanePA.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Project Alert Paragraph for an Hurricane Event</h3>
+    </div>
+    <div class="modal-body">
+        <div>
+            A major landfall hurricane is affecting {{ProjAlertParts.Report.STATE}}. The Storm Team has been activated and daily conference calls are being held at 0900
+            Eastern Time. {{ProjAlertParts.Event.EVENT_DESCRIPTION || "(No Event Discription)"}}, {WEATHER DAMAGES AND FATALITIES}. The areas with the most significant local impacts are
+            {AREAS WITH MOST LOCAL IMPACT}. The USGS {{ProjAlertParts.Report.STATE}} Office has dispatched {{ProjAlertParts.totYestFieldPers}} field staff to support high water
+            data collection.  In addition, {{ProjAlertParts.totYestOfficPers}} office staff are supporting the flood response. In total, {{ProjAlertParts.stateCount}}
+            USGS states are responding to this event. Within {{ProjAlertParts.Report.STATE}}, {{ProjAlertParts.Report.DEP_RAPDEPL_GAGE}} rapidly-deployable streamgages,
+            {{ProjAlertParts.Report.DEP_WTRLEV_SENSOR}} storm-tide water level sensors, and {{ProjAlertParts.Report.DEP_WV_SENS}} wave height and structure
+            sensors have been deployed to record storm conditions. As of today, {{ProjAlertParts.Report.HWM_FLAGGED}} high-water marks have been flagged with
+            {{ProjAlertParts.Report.HWM_COLLECTED}} surveyed into the elevations. {{ProjAlertParts.Report.QW_DISCR_SAMPLES}} water quality samples have been collected in
+            {{ProjAlertParts.Report.STATE}}. Numerous contacts have been made with {EVENT CONTACTS}. These contacts were primarily to give instrumentation status updates
+            and {OTHER REASONS}. {{ProjAlertParts.measureCts}} additional streamflow measurements have been made at the surface-water gages in the
+            {OTHER AREAS MEASUREMENTS TAKEN} area. {{ProjAlertParts.Report.GAGE_PEAK_RECORD}} streamgages have exceeded period of record highs.
+        </div>
+        <div style="margin-top:2em">Click <a href="http://water.usgs.gov/project_alert/alert_form.html" target="_blank">here</a> to open Project Alert in a new tab.</div>
+        <br clear="all" />
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" ng-click="ok()">OK</button>
+    </div>
+</script>

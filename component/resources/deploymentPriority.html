@@ -1,0 +1,80 @@
+<div ng-if="accountRole == 'Admin'">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width:0"></th>
+                <th>Deployment Priority</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="dp in deployPriorityList | orderBy: 'PRIORITY_ID'">
+                <td style="white-space: nowrap">
+                    <!-- form -->
+                    <form editable-form name="DProwform" onaftersave="saveDepPriority($data, dp.PRIORITY_ID)" ng-show="DProwform.$visible" class="form-buttons form-inline" shown="inserted == dp">
+                        <button type="submit" ng-disabled="DProwform.$waiting" class="btn btn-primary">
+                            save
+                        </button>
+                        <button type="button" ng-disabled="DProwform.$waiting" ng-click="DProwform.$cancel()" class="btn btn-default">
+                            cancel
+                        </button>
+                    </form>
+                    <div class="buttons" ng-show="!DProwform.$visible">
+                        <button class="btn btn-primary" ng-click="DProwform.$show()">edit</button>
+                        <button class="btn btn-danger" ng-click="deleteDepPriority(dp)">del</button>
+                    </div>
+                </td>
+                <td>
+                    <div style="display:none"><span editable-text="dp.PRIORITY_ID" e-form="DProwform" e-name="PRIORITY_ID">{{dp.PRIORITY_ID}}</span></div>
+                    <span editable-text="dp.PRIORITY_NAME" e-name="PRIORITY_NAME" e-form="DProwform">{{ dp.PRIORITY_NAME || '' }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    <button ng-show="addDPButtonShowing" class="btn btn-primary" ng-click="showAddDPClicked()">Add New Deployment Priority</button>
+
+    <div ng-show="showAddDPForm">
+        <form class="form-horizontal" name="lookupForm.deploymentPriorityFm">
+            <fieldset>
+                <div class="form-group required">
+                    <label class="col-md-3 control-label req" for="TYPE">Deployment Priority:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="PRIORITY_NAME" name="PRIORITY_NAME" type="text" placeholder="" ng-model="newDP.PRIORITY_NAME" required />
+                    </div>
+                </div>
+                <!--submit button-->
+                <div class="form-group">
+                    <div class="col-md-2 col-md-offset-2">
+                        <span>
+                            <button class="btn btn-primary" ng-click="AddDepPriority(lookupForm.deploymentPriorityFm.$valid, newDP)">
+                                Add
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </fieldset>
+        </form><button class="btn btn-default center-block" style="margin-top:-48px;" ng-click="NeverMindDP()">
+            Never Mind
+        </button>
+    </div>
+</div><!--end admin view-->
+<div ng-if="accountRole !='Admin'">
+    <script>
+        var sortingOrder = 'PRIORITY_NAME';
+    </script>
+
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th class="PRIORITY_NAME">Deployment Priority&nbsp;<a ng-click="sort_by('PRIORITY_NAME')"><i class="glyphicon glyphicon-sort"></i></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="dp in deployPriorityList | orderBy:sortingOrder:reverse">
+                <td>{{ dp.PRIORITY_NAME || '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

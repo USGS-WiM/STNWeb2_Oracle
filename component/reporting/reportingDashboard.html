@@ -1,0 +1,89 @@
+<style type="text/css">
+    .tab-content {
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+    }
+
+        .tab-content > .active {
+            background: white none repeat scroll 0 0 !important;
+            color: black !important;
+        }
+</style>
+<uib-tabset id="bypassme">
+    <uib-tab heading="Today">
+        <div ng-show="todayRpts != undefined || todayRpts.length > 0">
+            <ul ng-repeat="(key, value) in todayRpts | groupBy: 'EVENT_NAME'">
+                <label>{{key}}</label>
+                <li style="margin-bottom:5px" ng-repeat="r in value">
+                    {{r.STATE}}
+                    <button ng-click="ViewReport(r)" style="margin-left:10px;" class="btn btn-primary">View</button>
+                    <span ng-if="r.COMPLETE == 1">
+                        <button ng-click="getProjectAlertText(r)" class=" btn btn-primary">Project Alert</button>
+                    </span><span ng-if="r.COMPLETE == 0">
+                        <button class=" btn btn-primary" ng-click="CompleteThisReport(r)">Complete</button>
+                    </span>
+                </li>
+            </ul>
+        </div>
+        <div ng-show="todayRpts == undefined || todayRpts.length == 0">
+            <div>No Reports were filed today.</div>
+        </div>
+    </uib-tab>
+    <uib-tab heading="Yesterday">
+        <div ng-show="yesterdayRpts != undefined || yesterdayRpts.length > 0">
+            <ul ng-repeat="(key, value) in yesterdayRpts | groupBy: 'EVENT_NAME'">
+                <label>{{key}}</label>
+                <li style="margin-bottom:5px" ng-repeat="r in value">
+                    {{r.STATE}}
+                    <button ng-click="ViewReport(r)" style="margin-left:10px;" class="btn btn-primary">View</button>
+                    <span ng-if="r.COMPLETE == 1">
+                        <button ng-click="getProjectAlertText(r)" class=" btn btn-primary">Project Alert</button>
+                    </span><span ng-if="r.COMPLETE == 0">
+                        <button class=" btn btn-primary" ng-click="CompleteThisReport(r)">Complete</button>
+                    </span>
+                </li>
+            </ul>
+        </div>
+        <div ng-show="yesterdayRpts == undefined || yesterdayRpts.length == 0">
+            <div>No Reports were filed yesterday.</div>
+        </div>
+    </uib-tab>
+    <uib-tab heading="Pick a Date">
+        <div>
+            <label class="col-md-1 pull-left">Date:</label>
+            <div class="col-md-3 input-group pull-left" style="padding-left:15px;padding-right:15px;">
+                <input type="date" datepicker-append-to-body="true" class="form-control dateInputStyle" id="THIS_DATE" name="td" show-weeks="false" 
+                       uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.td" ng-model="THIS_DATE.date" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default" ng-click="open($event, 'td')">
+                        <i class="glyphicon glyphicon-calendar" />
+                    </button>
+                </span>
+            </div>
+            <button style="margin-left:10px;" class="btn btn-primary" ng-click="getReportsByDate()">Get Reports</button>
+            <br clear="all" />
+            <div style="margin-top:10px;" ng-if="pickAdateReports">
+                <div ng-show="pickDateRpts != undefined">
+                    <ul ng-repeat="(key, value) in pickDateRpts | groupBy: 'EVENT_NAME'">
+                        <label>{{key}}</label>
+                        <li style="margin-bottom:5px" ng-repeat="r in value">
+                            {{r.STATE}}
+                            <button ng-click="ViewReport(r)" style="margin-left:10px;" class="btn btn-primary">View</button>
+                            <span ng-if="r.COMPLETE == 1">
+                                <button ng-click="getProjectAlertText(r)" class=" btn btn-primary">Project Alert</button>
+                            </span><span ng-if="r.COMPLETE == 0">
+                                <button class=" btn btn-primary" ng-click="CompleteThisReport(r)">Complete</button>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div ng-show="pickDateRpts == undefined || pickDateRpts.length == 0">
+                    <div>No Reports for this date.</div>
+                </div>
+            </div>
+        </div>
+    </uib-tab>
+</uib-tabset>
+

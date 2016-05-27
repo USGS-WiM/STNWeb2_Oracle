@@ -1,0 +1,37 @@
+<div class="stn-home">
+    <!--<p>
+        This Data Management System (DMS) supports the <a href="{{serverURL}}/STN" target="_blank">STN Mapper</a>,
+        which is a metadata-discovery tool that captures information about...
+    </p>-->
+    <p>
+        <b>You can use the STN DMS to submit, edit, and delete your information.</b>
+    </p>
+
+
+    <form ng-submit="submit()" ng-controller="loginCtrl" class="login-form">
+        <div class="stn-login-error">{{error}}</div>
+
+        <div class="login-form-item pad-r">
+            <label for="username">Username</label>
+            <input type="text" ng-model="username" id="userNameFocus" name="username" placeholder="Enter User Name" required focus />
+        </div><!--
+        --><div class="login-form-item pad-b">
+            <label for="password">Password</label>
+            <input type="password" ng-model="password" name="password" placeholder="Enter Password" required data-toggle="tooltip" data-trigger="manual" data-title="Caps lock is on" />
+        </div><!--
+        --><div class="login-form-submit pad-l">
+            <button type="submit" class="btn-wim">Sign in</button>
+        </div>
+    </form>
+
+    <br clear="all"/>
+
+    <p>
+        <small>
+            If you have questions about STN or need assistance, please contact:<br>
+            <b>Marie Peppler</b><br />
+            <b>mpeppler@usgs.gov</b><br />
+            <b>703-648-5314</b>
+        </small>
+    </p>
+</div>

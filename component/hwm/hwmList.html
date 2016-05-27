@@ -1,0 +1,23 @@
+<uib-accordion close-others="false">
+    <uib-accordion-group is-open="status.hwmOpen">
+        <uib-accordion-heading>
+            <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.hwmOpen, 'glyphicon-chevron-right': !status.hwmOpen}"></i>
+            <span>High Water Marks</span>
+            <span class="badge pull-right">{{hwmCount.total}}</span>
+        </uib-accordion-heading>
+        <div ng-show="sessionEventExists" class="btn-group pull-right">
+            <button type="button" class="borderLess" ng-click="showHWMModal(0)" tooltip-placement="left" tooltip-append-to-body="true" uib-tooltip="Add a HWM">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+        </div>
+        <div class="col-md-12" ng-show="!sessionEventExists" style="border:solid 1px red">To create a HWM, first choose an Event above.</div><br clear="all" />
+        <ul>
+            <li style="list-style:none" ng-repeat="h in SiteHWMs  | orderBy: 'FLAG_DATE'">
+                <a ng-click="showHWMModal(h)">
+                    {{h.FLAG_DATE | date: "MM/dd/yyyy"}}
+                    <span ng-if="h.ELEV_FT"> - ({{h.ELEV_FT}} ft.)</span>
+                </a>
+            </li>
+        </ul>
+    </uib-accordion-group>
+</uib-accordion>

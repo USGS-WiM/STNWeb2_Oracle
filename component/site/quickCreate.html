@@ -1,0 +1,947 @@
+<div ng-if="sessionEventExists">
+    <form class="form-horizontal" name="quickForm.quick">
+        <fieldset>
+            <uib-accordion close-others="false">
+                <!-- SITE part -->
+                <uib-accordion-group is-open="status.siteOpen" ng-class="{'panel-danger': siteErrors}">
+                    <uib-accordion-heading>
+                        <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.siteOpen, 'glyphicon-chevron-right': !status.siteOpen}"></i>
+                        <span>Site</span>
+                    </uib-accordion-heading>
+
+                    <div class="col-md-6">
+                        <!--Site Description*-->
+                        <div class="form-group required" ng-class="{'has-error':quickForm.quick.SITE_DESCRIPTION.$invalid && quickForm.quick.SITE_DESCRIPTION.$dirty}">
+                            <label class="col-md-4 control-label req" for="SITE_DESCRIPTION">Site Description:</label>
+                            <div class="col-md-7">
+                                <textarea class="form-control" id="SITE_DESCRIPTION" type="text" rows="3" name="SITE_DESCRIPTION" placeholder="Site Description" ng-model="aSite.SITE_DESCRIPTION" required />
+                            </div>
+                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Brief description of the site area. Displayed publicly.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
+                        </div>
+
+                        <!--<lat-long location="LOCATION"></lat-long>-->
+                        <!-- dec deg or dms: -->
+                        <div>
+                            <label class="col-md-4 control-label"></label>
+                            <div class="col-md-7">
+                                <span class="radio-inline">
+                                    <input type="radio" name="decDegORdms" ng-model="decDegORdms.val" ng-change="latLongChange()" value="dd" /> Dec Deg
+                                </span>
+                                <span class="radio-inline">
+                                    <input type="radio" name="decDegORdms" ng-model="decDegORdms.val" ng-change="latLongChange()" value="dms" /> DMS
+                                </span>
+                            </div>
+                        </div>
+
+                        <!--Latitude*-->
+                        <div class="form-group required" style="padding-top:0" ng-class="{'has-error':quickForm.quick.LATITUDE_DD.$invalid && quickForm.quick.LATITUDE_DD.$dirty}">
+                            <label class="col-md-4 control-label req" for="SITE_LATITUDE_DD">Latitude:</label>
+                            <div class="col-md-7" ng-if="decDegORdms.val == 'dd'">
+                                <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="SITE_LATITUDE_DD" ng-model="aSite.LATITUDE_DD"
+                                       ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue()" type="text" placeholder="Latitude" required />
+                            </div>
+                            <div class="col-md-7" ng-if="decDegORdms.val == 'dms'">
+                                <table>
+                                    <tr>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
+                                        <td>°</td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LAMin" type="text" /></td>
+                                        <td>′</td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LASec" type="text" /></td>
+                                        <td>″</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!--Longitude*-->
+                        <div class="form-group required" ng-class="{'has-error':quickForm.quick.LONGITUDE_DD.$invalid && quickForm.quick.LONGITUDE_DD.$dirty}">
+                            <label class="col-md-4 control-label req" for="SITE_LONGITUDE_DD">Longitude:</label>
+                            <div class="col-md-7" ng-if="decDegORdms.val == 'dd'">
+                                <input class="form-control" ng-keypress="isNum($event)" ng-enter="getAddress()" id="SITE_longitude_dd" name="LONGITUDE_DD" ng-model="aSite.LONGITUDE_DD"
+                                       ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue()" type="text" placeholder="Longitude" required />
+                            </div>
+                            <div class="col-md-7" ng-if="decDegORdms.val == 'dms'">
+                                <table>
+                                    <tr>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Deg" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" ng-model="DMS.LODeg" type="text" /></td>
+                                        <td>°</td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LOMin" type="text" /></td>
+                                        <td>′</td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LOSec" type="text" /></td>
+                                        <td>″</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!--Horizontal Datum*-->
+                        <div class="form-group required" ng-class="{'has-error':quickForm.quick.HDATUM_ID.$invalid && quickForm.quick.HDATUM_ID.$dirty}">
+                            <label class="col-md-4 control-label req" for="SITE_HDATUM_ID">Horizontal Datum:</label>
+                            <div class="col-md-7">
+                                <select class="form-control" id="SITE_HDATUM_ID" name="HDATUM_ID" ng-model="aSite.HDATUM_ID"
+                                        ng-options="hd.DATUM_ID as hd.DATUM_NAME for hd in horDatumList" required>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!--Horizontal Collection Method*-->
+                        <div class="form-group required" ng-class="{'has-error':quickForm.quick.HCOLLECT_METHOD_ID.$invalid && quickForm.quick.HCOLLECT_METHOD_ID.$dirty}">
+                            <label class="col-md-4 control-label req" for="SITE_HCOLLECT_METHOD_ID">Horizontal Collection Method:</label>
+                            <div class="col-md-7">
+                                <select class="form-control" id="SITE_HCOLLECT_METHOD_ID" name="HCOLLECT_METHOD_ID" ng-model="aSite.HCOLLECT_METHOD_ID"
+                                        ng-options="hc.HCOLLECT_METHOD_ID as hc.HCOLLECT_METHOD for hc in horCollMethodList" required>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!--Waterbody*-->
+                        <div class="form-group required" ng-class="{'has-error':quickForm.quick.WATERBODY.$invalid && quickForm.quick.WATERBODY.$dirty}">
+                            <label class="col-md-4 control-label req" for="SITE_WATERBODY">Waterbody:</label>
+                            <div class="col-md-7">
+                                <input class="form-control" id="SITE_WATERBODY" name="WATERBODY" ng-model="aSite.WATERBODY" type="text" required />
+                            </div>
+                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip-html="htmlDescriptionTip">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
+                        </div>
+
+                        <!--Sensor Not Appropriate-->
+                        <div class="form-group" ng-if="CreateWhat == 'HWM'">
+                            <label class="col-md-4 control-label" for="SENSOR_NOT_APPROPRIATE" style="padding-left:0;">Check if Sensor is not appropriate here:</label>
+                            <div class="col-md-7" style="margin-top:14px;">
+                                <ul style="padding-left:0">
+                                    <li style="list-style:none;">
+                                        <input type="checkbox" name="SENSOR_NOT_APPROPRIATE" ng-model="aSite.SENSOR_NOT_APPROPRIATE" ng-true-value="1" ng-false-value="0" />
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!--Access Permission Granted-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="ACCESS_GRANTED">Access Permission Granted:</label>
+                            <div class="col-md-7" style="margin-top:14px">
+                                <span class="radio-inline">
+                                    <input type="radio" name="ACCESS_GRANTED" ng-model="aSite.ACCESS_GRANTED" value="Yes"> Yes
+                                </span>
+                                <span class="radio-inline">
+                                    <input type="radio" name="ACCESS_GRANTED" ng-model="aSite.ACCESS_GRANTED" value="No"> No
+                                </span>
+                                <span class="radio-inline">
+                                    <input type="radio" name="ACCESS_GRANTED" ng-model="aSite.ACCESS_GRANTED" value="Not Needed"> Not Needed
+                                </span>
+                            </div>
+                        </div>
+                    </div><!--end first column-->
+
+                    <div class="col-md-6">
+                        <!--populate button*-->
+                        <div class="form-group">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="POPULATEBTN">Click to populate address fields:</label>
+                                        <div class="col-md-7">
+                                            <button type="button" ng-click="getAddress()" class="btn btn-primary">Verify Location</button>
+                                        </div>
+                                        <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Also checks for nearby sites within x ft, and populates 5 fields below.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
+                                    </div>
+
+                                    <!--Address-->
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="ADDRESS">Address:</label>
+                                        <div class="col-md-7">
+                                            <input class="form-control" id="ADDRESS" name="ADDRESS" ng-model="aSite.ADDRESS" type="text" />
+                                        </div>
+                                    </div>
+
+                                    <!--City-->
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="CITY">City:</label>
+                                        <div class="col-md-7">
+                                            <input class="form-control" id="CITY" name="CITY" ng-model="aSite.CITY" type="text" />
+                                        </div>
+                                    </div>
+
+                                    <!--State*-->
+                                    <div class="form-group required" ng-class="{'has-error':quickForm.quick.STATE.$invalid && quickForm.quick.STATE.$dirty}">
+                                        <label class="col-md-4 control-label req" for="SITE_STATE">State:</label>
+                                        <div class="col-md-7">
+                                            <select class="form-control" id="SITE_STATE" name="STATE" ng-model="aSite.STATE" ng-change="updateCountyList(aSite.STATE)"
+                                                    ng-options="state.STATE_ABBREV as state.STATE_NAME for state in stateList" required>
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+                                        <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Used to autogenerate the Site Number.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
+                                    </div>
+
+                                    <!--Zip-->
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="ZIP">Zip:</label>
+                                        <div class="col-md-7">
+                                            <input class="form-control" id="ZIP" name="ZIP" ng-model="aSite.ZIP" type="text" ui-mask="{{'99999'}}" />
+                                        </div>
+                                    </div>
+
+                                    <!--County*-->
+                                    <div class="form-group required" ng-class="{'has-error':quickForm.quick.COUNTY.$invalid && quickForm.quick.COUNTY.$dirty}">
+                                        <label class="col-md-4 control-label req" for="SITE_COUNTY">County:</label>
+                                        <div class="col-md-7">
+                                            <select class="form-control" id="SITE_COUNTY" name="COUNTY" ng-model="aSite.COUNTY" ng-options="c.COUNTY_NAME as c.COUNTY_NAME for c in stateCountyList" required>
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+                                        <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Used to autogenerate the Site Number. Use the verify location to populate.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Drainage Area-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="DRAINAGE_AREA_SQMI">Drainage Area (sq mi):</label>
+                            <div class="col-md-7">
+                                <input class="form-control" id="DRAINAGE_AREA_SQMI" ng-keypress="isNum($event)" name="DRAINAGE_AREA_SQMI" ng-model="aSite.DRAINAGE_AREA_SQMI" type="text" />
+                            </div>
+                        </div>
+
+                        <!--Station ID for USGS gage-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="USGS_SID">Station ID for USGS gage:</label>
+                            <div class="col-md-7">
+                                <input class="form-control" id="USGS_SID" name="USGS_SID" ng-model="aSite.USGS_SID" type="text" />
+                            </div>
+                        </div>
+
+                        <!--Station ID for NOAA gage-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="NOAA_SID">Station ID for NOAA gage:</label>
+                            <div class="col-md-7">
+                                <input class="form-control" id="NOAA_SID" name="NOAA_SID" ng-model="aSite.NOAA_SID" type="text" />
+                            </div>
+                        </div>
+
+                        <!--Other Station ID-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="OTHER_SID">Other Station ID:</label>
+                            <div class="col-md-7">
+                                <input class="form-control" id="OTHER_SID" name="OTHER_SID" placeholder="Please add details in the Site Description" ng-model="aSite.OTHER_SID" type="text" />
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </uib-accordion-group>
+
+                <!-- OP part -->
+                <uib-accordion-group is-open="status.opOpen" ng-class="{'panel-danger':opErrors}">
+                    <uib-accordion-heading>
+                        <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.opOpen, 'glyphicon-chevron-right': !status.opOpen}"></i>
+                        <span>Datum Location</span>
+                    </uib-accordion-heading>
+                    <div class="col-md-6">
+                        <!-- Type: -->
+                        <div class="form-group required" ng-class="{'has-error':quickForm.quick.OP_TYPE_ID.$invalid && quickForm.quick.OP_TYPE_ID.$dirty}">
+                            <label class="col-md-4 control-label req" for="OP_TYPE_ID">Type:</label>
+                            <div class="col-md-7">
+                                <select class="form-control" id="OP_TYPE_ID" name="OP_TYPE_ID" ng-model="aOP.OP_TYPE_ID"
+                                        ng-options="opt.OBJECTIVE_POINT_TYPE_ID as opt.OP_TYPE for opt in opTypeList" required>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Name: -->
+                        <div class="form-group required" ng-class="{'has-error':quickForm.quick.NAME.$invalid && quickForm.quick.NAME.$dirty}">
+                            <label class="col-md-4 control-label req" for="NAME">Name:</label>
+                            <div class="col-md-7">
+                                <input class="form-control" id="OP_NAME" name="NAME" ng-model="aOP.NAME" type="text" required />
+                            </div>
+                        </div>
+
+                        <!-- Description: -->
+                        <div class="form-group required" ng-class="{'has-error':quickForm.quick.DESCRIPTION.$invalid && quickForm.quick.DESCRIPTION.$dirty}">
+                            <label class="col-md-4 control-label req" for="DESCRIPTION">Description:</label>
+                            <div class="col-md-7">
+                                <textarea class="form-control" id="OP_DESCRIPTION" name="DESCRIPTION" type=" text" rows="3" ng-model="aOP.DESCRIPTION" required />
+                            </div>
+                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip-html="htmlDescriptionTip">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
+                        </div>
+
+                        <!-- Control Identifier add button -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="CONTROL">Control Identifier:</label>
+                            <div class="col-md-7">
+                                <button type="button" class="btn btn-primary" ng-click="addNewIdentifier()">Add New Identifier</button>
+                            </div>
+                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="National Geodetic Survey permanent identifier. See: ngs.noaa.gov/NGSDataExplorer/ for more information.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
+                        </div>
+
+                        <!-- Control Identifier input: -->
+                        <div class="form-group" ng-show="showControlIDinput">
+                            <label class="col-md-4 control-label"></label>
+                            <div class="col-md-7">
+                                <div ng-repeat="id in addedIdentifiers">
+                                    <div class="col-md-12" style="margin-bottom:5px; padding: 0;">
+                                        <div class="col-md-6"><input class="form-control" id="OPControl" name="OPControl" ng-model="id.IDENTIFIER" type="text" /></div>
+                                        <input type="hidden" name="OP_CONTROL_IDENTIFIER_ID" ng-model="id.OP_CONTROL_IDENTIFIER_ID" />
+                                        <input type="hidden" name="OBJECTIVE_POINT_ID" ng-model="id.OBJECTIVE_POINT_ID" />
+                                        <span class="radio-inline">
+                                            <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="id.IDENTIFIER_TYPE" value="PID" /> PID
+                                        </span>
+                                        <span class="radio-inline">
+                                            <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="id.IDENTIFIER_TYPE" value="Other" /> Other
+                                        </span>
+                                        <div class="buttons pull-right">
+                                            <button type="button" class="btn borderLess" ng-click="RemoveID(id)">
+                                                <i class="glyphicon glyphicon-remove"></i>
+                                            </button>
+                                        </div>
+                                    </div><br />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ft or Meter radios: -->
+                        <div>
+                            <label class="col-md-4 control-label"></label>
+                            <div class="col-md-7">
+                                <span class="radio-inline">
+                                    <input type="radio" name="FTorMETER" ng-model="FTorMETER" value="ft" /> ft
+                                </span>
+                                <span class="radio-inline">
+                                    <input type="radio" name="FTorMETER" ng-model="FTorMETER" value="meter" /> meter
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Elevation: -->
+                        <div class="form-group" style="padding-top:0;">
+                            <label class="col-md-4 control-label" for="ELEV_FT">Elevation:</label>
+                            <div class="col-md-7">
+                                <input class="form-control" ng-keypress="isNum($event)" id="ELEV_FT" name="ELEV_FT" ng-model="aOP.ELEV_FT" type="text" />
+                            </div>
+                        </div>
+
+                        <!-- Objective Point Notes: -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="OP_NOTES">Datum Location Notes:</label>
+                            <div class="col-md-7">
+                                <textarea class="form-control" id="OP_NOTES" type="text" name="OP_NOTES" rows="3" ng-model="aOP.OP_NOTES" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <!-- Vertical Datum: -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="VDATUM_ID">Vertical Datum:</label>
+                            <div class="col-md-7">
+                                <select class="form-control" id="OP_VDATUM_ID" name="VDATUM_ID" ng-model="aOP.VDATUM_ID"
+                                        ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in vertDatumList">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Vertical Collection Method: -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="VCOLLECT_METHOD_ID">Vertical Collection Method:</label>
+                            <div class="col-md-7">
+                                <select class="form-control" id="VCOLLECT_METHOD_ID" name="VCOLLECT_METHOD_ID" ng-model="aOP.VCOLLECT_METHOD_ID"
+                                        ng-options="vcm.VCOLLECT_METHOD_ID as vcm.VCOLLECT_METHOD for vcm in vertCollMethodList">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Ft or CM radios: -->
+                        <div>
+                            <label class="col-md-4 control-label"></label>
+                            <div class="col-md-7">
+                                <span class="radio-inline">
+                                    <input type="radio" name="FTorCM" ng-model="FTorCM" value="ft" /> +/- ft
+                                </span>
+                                <span class="radio-inline">
+                                    <input type="radio" name="FTorCM" ng-model="FTorCM" value="cm" /> +/- cm
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Uncertainty: -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="UNCERTAINTY">Uncertainty:</label>
+                            <div class="col-md-7">
+                                <!--<div class="col-md-12" style="margin-bottom:5px;padding-left:0">-->
+                                <div class="col-md-3" style="padding-left: 0;"><input class="form-control" ng-disabled="aOP.UNQUANTIFIED==1" ng-keypress="isNum($event)" ng-model="aOP.UNCERTAINTY" type="text" /></div>
+                                <div class="col-md-2" style="text-decoration:underline">OR</div>
+                                <div class="col-md-7">
+                                    <input type="checkbox" ng-model="aOP.UNQUANTIFIED" name="UNQUANTIFIED" ng-checked="aOP.UNQUANTIFIED==1" ng-true-value="1" ng-false-value="0" ng-click="UnquantChecked()" />
+                                    <span style="margin-left:10px">Unquantified</span>
+                                </div>
+
+                                <!--  <br />
+                            </div>-->
+                            </div>
+                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="From GNSS or OPUS solution.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
+                        </div>
+
+                        <!-- Quality: -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="OP_QUALITY_ID">Quality:</label>
+                            <div class="col-md-7">
+                                <select class="form-control" id="OP_QUALITY_ID" name="OP_QUALITY_ID" ng-model="aOP.OP_QUALITY_ID"
+                                        ng-options="opq.OP_QUALITY_ID as opq.QUALITY for opq in opQualList">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <!-- Date Established: -->
+                        <div class="form-group required" ng-class="{'has-error':quickForm.quick.DATE_ESTABLISHED.$invalid && quickForm.quick.DATE_ESTABLISHED.$dirty}">
+                            <label class="col-md-4 control-label req" for="DATE_ESTABLISHED">Date Established:</label>
+                            <div class="col-md-7 input-group" style="padding-right:14px;padding-left:14px">
+                                <input class="form-control dateInputStyle" id="OP_DATE_ESTABLISHED" name="de" type="date" uib-datepicker-popup="MM/dd/yyyy" datepicker-append-to-body="true"
+                                       show-weeks="false" is-open="datepickrs.de" ng-model="aOP.DATE_ESTABLISHED" required />
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" ng-click="open($event, 'de')">
+                                        <i class="glyphicon glyphicon-calendar" />
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </uib-accordion-group>
+
+                <!-- HWM part -->
+                <div ng-if="CreateWhat == 'HWM'" style="margin-top:5px">
+                    <uib-accordion-group is-open=" status.hwmOpen" ng-class="{'panel-danger': hwmErrors}">
+                        <uib-accordion-heading>
+                            <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.hwmOpen, 'glyphicon-chevron-right': !status.hwmOpen}"></i>
+                            <span>HWM</span>
+                        </uib-accordion-heading>
+
+                        <div class="col-md-6">
+                            <!-- Event -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">Event:</label>
+                                <div class="col-md-7" style="margin-top:14px">
+                                    <div>{{EventName}}</div>
+                                </div>
+                            </div>
+
+                            <!-- HWM Type:* -->
+                            <div class="form-group required" ng-class="{'has-error':quickForm.quick.HWM_TYPE_ID.$invalid && quickForm.quick.HWM_TYPE_ID.$dirty}">
+                                <label class="col-md-4 control-label req" for="HWM_TYPE_ID">HWM Type:</label>
+                                <div class="col-md-7">
+                                    <select class="form-control" id="HWM_TYPE_ID" name="HWM_TYPE_ID" ng-model="aHWM.HWM_TYPE_ID"
+                                            ng-options="htype.HWM_TYPE_ID as htype.HWM_TYPE for htype in hwmTypeList" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Marker: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">Marker:</label>
+                                <div class="col-md-7">
+                                    <select class="form-control" id="MARKER_ID" name="MARKER_ID" ng-model="aHWM.MARKER_ID"
+                                            ng-options="vd.MARKER_ID as vd.MARKER1 for vd in markerList">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- HWM Environment:* -->
+                            <div class="form-group required" style="padding-bottom:0;margin-bottom:0" ng-class="{'has-error':quickForm.quick.HWM_ENVIRONMENT.$invalid && quickForm.quick.HWM_ENVIRONMENT.$dirty}">
+                                <label class="col-md-4 control-label req">HWM Environment:</label>
+                                <div class="col-md-7">
+                                    <span class="radio-inline">
+                                        <input type="radio" id="C_HWM_ENVIRONMENT" name="HWM_ENVIRONMENT" ng-model="aHWM.HWM_ENVIRONMENT" value="Coastal" />Coastal
+                                    </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" id="R_HWM_ENVIRONMENT" name="HWM_ENVIRONMENT" ng-model="aHWM.HWM_ENVIRONMENT" value="Riverine" />Riverine
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Breakdown of categories -->
+                            <div class="form-group" style="padding-top:0">
+                                <label class="col-md-4"></label>
+                                <div class="col-md-7" style="padding-left:0">
+                                    <table>
+                                        <tr><td style="text-align: center;width: 81px">0.05</td><td style="text-align: center;width: 81px">0.02</td><td style="text-align: left;width: 81px">Excellent</td></tr>
+                                        <tr><td style="text-align: center;width: 81px">0.1</td><td style="text-align: center;width: 81px">0.05</td><td style="text-align: left;width: 81px">Good</td></tr>
+                                        <tr><td style="text-align: center;width: 81px">0.2</td><td style="text-align: center;width: 81px">0.1</td><td style="text-align: left;width: 81px">Fair</td></tr>
+                                        <tr><td style="text-align: center;width: 81px">0.4</td><td style="text-align: center;width: 81px">0.2</td><td style="text-align: left;width: 81px">Poor</td></tr>
+                                        <tr><td style="text-align: center;width: 81px">&#62;0.40</td><td style="text-align: center;width: 81px">&#62;0.20</td><td style="text-align: left;width: 81px">V. Poor</td></tr>
+                                        <tr><td colspan="3"><a href="http://pubs.usgs.gov/tm/11d1/" target="_blank">USGS T&M 11-D1, Table 13</a></td></tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- HWM Quality:* -->
+                            <div class="form-group required" ng-class="{'has-error':quickForm.quick.HWM_QUALITY_ID.$invalid && quickForm.quick.HWM_QUALITY_ID.$dirty}">
+                                <label class="col-md-4 control-label req">HWM Quality:</label>
+                                <div class="col-md-7">
+                                    <select class="form-control" id="HWM_QUALITY_ID" name="HWM_QUALITY_ID" ng-model="aHWM.HWM_QUALITY_ID"
+                                            ng-options="hqual.HWM_QUALITY_ID as hqual.HWM_QUALITY for hqual in hwmQualList" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Bank: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">Bank:</label>
+                                <div class="col-md-7">
+                                    <span class="radio-inline">
+                                        <input type="radio" name="BANK" ng-model="aHWM.BANK" value="Left" />Left
+                                    </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" name="BANK" ng-model="aHWM.BANK" value="Right" />Right
+                                    </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" name="BANK" ng-model="aHWM.BANK" value="N/A" />N/A
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Location Description: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="HWM_LOCATIONDESCRIPTION">Location Description:</label>
+                                <div class="col-md-7">
+                                    <textarea class="form-control" id="HWM_LOCATIONDESCRIPTION" name="HWM_LOCATIONDESCRIPTION" type=" text" rows="3" ng-model="aHWM.HWM_LOCATIONDESCRIPTION" />
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Please be specific so someone else can find this sensor later. This field is public.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <!-- Height above ground (ft): -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="HEIGHT_ABOVE_GND">Height above ground (ft):</label>
+                                <div class="col-md-7">
+                                    <input class="form-control" ng-keypress="isNum($event)" name="HEIGHT_ABOVE_GND" ng-model="aHWM.HEIGHT_ABOVE_GND" type="text" />
+                                </div>
+                            </div>
+
+                            <!-- Flagged Date: * -->
+                            <div class="form-group required" ng-class="{'has-error':quickForm.quick.FLAG_DATE.$invalid && quickForm.quick.FLAG_DATE.$dirty}">
+                                <label class="col-md-4 control-label req" for="FLAG_DATE">Flagged Date:</label>
+                                <div class="col-md-7 input-group" style="padding-right:14px;padding-left:14px">
+                                    <input class="form-control dateInputStyle" id="FLAG_DATE" name="fd" type="date" uib-datepicker-popup="MM/dd/yyyy"
+                                           show-weeks="false" is-open="datepickrs.fd" ng-model="aHWM.FLAG_DATE" required />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" ng-click="open($event, 'fd')">
+                                            <i class="glyphicon glyphicon-calendar" />
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Surveyed Date: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="SURVEY_DATE">Surveyed Date:</label>
+                                <div class="col-md-7">
+                                    <div class="col-md-12 input-group">
+                                        <input class="form-control dateInputStyle" id="SURVEY_DATE" name="sd" type="date" uib-datepicker-popup="MM/dd/yyyy"
+                                               is-open="datepickrs.sd" show-weeks="false" ng-model="aHWM.SURVEY_DATE" />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" ng-click="open($event, 'sd')">
+                                                <i class="glyphicon glyphicon-calendar" />
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-right" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Elevation required below if survey date is populated.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
+
+                            <!-- Surveyed Elevation (ft): -->
+                            <div class="form-group" ng-class="{'required': aHWM.SURVEY_DATE}">
+                                <label class="col-md-4 control-label" ng-class="{'req': aHWM.SURVEY_DATE}" for="ELEV_FT">Surveyed Elevation (ft):</label>
+                                <div class="col-md-7">
+                                    <input class="form-control" ng-keypress="isNum($event)" name="ELEV_FT" ng-model="aHWM.ELEV_FT" ng-required="aHWM.SURVEY_DATE" type="text" />
+                                </div>
+                            </div>
+
+                            <!-- Vertical Datum: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">Vertical Datum:</label>
+                                <div class="col-md-7">
+                                    <select class="form-control" id="VDATUM_ID" name="VDATUM_ID" ng-model="aHWM.VDATUM_ID"
+                                            ng-options="vd.DATUM_ID as vd.DATUM_NAME for vd in vertDatumList">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Vertical Collection Method: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">Vertical Collection Method:</label>
+                                <div class="col-md-7">
+                                    <select class="form-control" id="HWM_VDATUM_ID" name="VCOLLECT_METHOD_ID" ng-model="aHWM.VCOLLECT_METHOD_ID"
+                                            ng-options="vcm.VCOLLECT_METHOD_ID as vcm.VCOLLECT_METHOD for vcm in vertCollMethodList">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Ft or CM radios: -->
+                            <div>
+                                <label class="col-md-4 control-label"></label>
+                                <div class="col-md-7">
+                                    <span class="radio-inline">
+                                        <input type="radio" name="FTorCM" ng-model="FTorCM" value="ft" /> +/- ft
+                                    </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" name="FTorCM" ng-model="FTorCM" value="cm" /> +/- cm
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Uncertainty: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="UNCERTAINTY">Uncertainty:</label>
+                                <div class="col-md-7">
+                                    <div class="col-md-12" style="margin-bottom:5px;padding-left:0">
+                                        <div class="col-md-5" style="padding-left: 0;"><input class="form-control" ng-keypress="isNum($event)" ng-model="aHWM.UNCERTAINTY" type="text" /></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Notes: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="HWM_NOTES">Notes:</label>
+                                <div class="col-md-7">
+                                    <textarea class="form-control" id="HWM_NOTES" name="HWM_NOTES" type=" text" rows="3" ng-model="aHWM.HWM_NOTES" />
+                                </div>
+                            </div>
+
+                            <!-- Stillwater Location? -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">Tranquil/Stillwater HWM:</label>
+                                <div class="col-md-7">
+                                    <span class="radio-inline">
+                                        <input type="radio" name="STILLWATER" ng-model="aHWM.STILLWATER" value="1" />Yes
+                                    </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" name="STILLWATER" ng-model="aHWM.STILLWATER" value="0" />No
+                                    </span>
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Tranquil-Water HWMs preferred over Rapid-Water HWMs. Refer to T&M 3-A24 for details.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
+                        </div> <!-- end "col-md-6" -->
+                    </uib-accordion-group>
+                </div> <!-- end createWhat == hwm -->
+                <!-- sensor part -->
+                <div ng-if="CreateWhat == 'Sensor'" style="margin-top:5px">
+                    <uib-accordion-group is-open="status.hwmOpen" ng-class="{'panel-danger': hwmErrors}">
+                        <uib-accordion-heading>
+                            <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.hwmOpen, 'glyphicon-chevron-right': !status.hwmOpen}"></i>
+                            <span>Sensor</span>
+                        </uib-accordion-heading>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">Event:</label>
+                                <div class="col-md-7" style="margin-top:14px">
+                                    <div>{{EventName}}</div>
+                                </div>
+                            </div>
+
+                            <!-- Sensor Type:* -->
+                            <div class="form-group required" ng-class="{'has-error':quickForm.quick.SENSOR_TYPE_ID.$invalid && quickForm.quick.SENSOR_TYPE_ID.$dirty}">
+                                <label class="col-md-4 control-label req" for="SENSOR_TYPE_ID">Sensor Type:</label>
+                                <div class="col-md-7">
+                                    <select class="form-control" id="SENSOR_TYPE_ID" name="SENSOR_TYPE_ID" ng-model="aSensor.SENSOR_TYPE_ID"
+                                            ng-options="s.SENSOR_TYPE_ID as s.SENSOR for s in sensorTypeList" ng-change="getDepTypes()" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Sensor Brand:* -->
+                            <div class="form-group required" ng-class="{'has-error':quickForm.quick.SENSOR_BRAND_ID.$invalid && quickForm.quick.SENSOR_BRAND_ID.$dirty}">
+                                <label class="col-md-4 control-label req" for="SENSOR_BRAND_ID">Sensor Brand:</label>
+                                <div class="col-md-7">
+                                    <select class="form-control" id="SENSOR_BRAND_ID" name="SENSOR_BRAND_ID" ng-model="aSensor.SENSOR_BRAND_ID"
+                                            ng-options="sb.SENSOR_BRAND_ID as sb.BRAND_NAME for sb in sensorBrandList" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Serial Number:* -->
+                            <div class="form-group required" ng-class="{'has-error':quickForm.quick.SERIAL_NUMBER.$invalid && quickForm.quick.SERIAL_NUMBER.$dirty}">
+                                <label class="col-md-4 control-label req" for="SERIAL_NUMBER">Serial Number:</label>
+                                <div class="col-md-7">
+                                    <input class="form-control" name="SERIAL_NUMBER" ng-model="aSensor.SERIAL_NUMBER" type="text" required />
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Will be used in netCDF metadata.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
+
+                            <!-- Housing Serial Number: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="HOUSING_SERIAL_NUMBER">Housing Serial Number:</label>
+                                <div class="col-md-7">
+                                    <input class="form-control" name="HOUSING_SERIAL_NUMBER" ng-model="aSensor.HOUSING_SERIAL_NUMBER" type="text" />
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Required for DOI WATCH OFFICE 800 number.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
+
+                            <!-- Housing Types: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">Housing Types:</label>
+                                <div class="col-md-7">
+                                    <select class="form-control" id="HOUSING_TYPE_ID" name="HOUSING_TYPE_ID" ng-model="aSensor.HOUSING_TYPE_ID"
+                                            ng-options="ht.HOUSING_TYPE_ID as ht.TYPE_NAME for ht in houseTypeList">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- -------------------------- START TAPEDOWN SECTION --------------------------------  -->
+
+                            <uib-accordion close-others="false">
+                                <uib-accordion-group is-open="tapedown.Open">
+                                    <uib-accordion-heading>
+                                        <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': tapedown.Open, 'glyphicon-chevron-right': !tapedown.Open}"></i>
+                                        <span ng-click="showTapedownPart()">Tape Down Information</span>
+                                        <button type="button" class="col-md-1 borderLess pull-right" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="These elevations and tape down data are used for both field activities and final products. Please pay attention to how your data is entered.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
+                                    </uib-accordion-heading>
+                                    <!-- Add Tapedown button  ng-if="addTapedown"-->
+                                    <div>
+                                        <br clear="all" />
+                                        <div ng-show="tapeDownTable.length > 0">
+                                            <div class="pull-right col-md-6"><em>Note: these are not used for any calculations but are to facilitate field activities</em></div>
+                                            <table class="table table-condensed">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Datum Location</th>
+                                                        <th>Elevation</th>
+                                                        <th class="col-md-2">
+                                                            Offset<br />Correction
+                                                            <button type="button" class="borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="From the datum location to the sensor orifice.">
+                                                                <span class="glyphicon glyphicon-question-sign"></span>
+                                                            </button>
+                                                        </th>
+                                                        <th class="col-md-2">Water Surface</th>
+                                                        <th class="col-md-2">Ground Surface</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="t in tapeDownTable">
+                                                        <td>
+                                                            <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Remove Tapedown" ng-click="removeOP()"><span class="glyphicon glyphicon-remove"></span></button>
+                                                        </td>
+                                                        <td>{{t.OP_NAME}}<input type="hidden" ng-model="t.OBJECTIVE_TYPE_ID" /><input type="hidden" ng-model="t.OP_MEASUREMENTS_ID" /></td>
+                                                        <td>{{t.elevation}} {{t.Vdatum}}</td>
+                                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model="t.OFFSET_CORRECTION" /></td>
+                                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model="t.WATER_SURFACE" /></td>
+                                                        <td><input class="form-control" ng-keypress="isnum($event)" ng-model="t.GROUND_SURFACE" /></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <!-- Sensor status fields for tapedown -->
+                                            <div class="col-md-6">
+                                                <div class="form-group" style="margin-bottom:0">
+                                                    <label class="col-md-6 control-label" for="SENSOR_ELEVATION">Sensor Elevation:</label>
+                                                    <div class="col-md-5">
+                                                        <input class="form-control" ng-keypress="isNum($event)" name="SENSOR_ELEVATION" ng-model="aSensStatus.SENSOR_ELEVATION" type="text" />
+                                                    </div>
+                                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the offset correction, elevation of the sensor orifice.">
+                                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                                    </button>
+                                                </div>
+
+                                                <div class="form-group" style="margin-bottom:0">
+                                                    <label class="col-md-6 control-label" for="WS_ELEVATION">Water Surface Elevation:</label>
+                                                    <div class="col-md-5">
+                                                        <input class="form-control" ng-keypress="isNum($event)" name="WS_ELEVATION" ng-model="aSensStatus.WS_ELEVATION" type="text" />
+                                                    </div>
+                                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left-top" tooltip-append-to-body="false" uib-tooltip="Using the water surface tape down, elevation of the water surface.">
+                                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group" style="margin-bottom:0">
+                                                    <label class="col-md-6 control-label" for="GS_ELEVATION">Ground Elevation:</label>
+                                                    <div class="col-md-5">
+                                                        <input class="form-control" ng-keypress="isNum($event)" name="GS_ELEVATION" ng-model="aSensStatus.GS_ELEVATION" type="text" />
+                                                    </div>
+                                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left-top" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface.">
+                                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                                    </button>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-md-6 control-label req" for="VDATUM_ID">In feet above:</label>
+                                                    <div class="col-md-5">
+                                                        <select class="form-control" name="VDATUM_ID" ng-model="aSensStatus.VDATUM_ID"
+                                                                ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in vertDatumList">
+                                                            <option value=""></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="pull-right"><em>Note: these elevations are used in the sensor processing and the final products</em></div>
+                                            </div>
+                                        </div>
+                                        <br clear="all" />
+                                    </div>
+                                </uib-accordion-group>
+                            </uib-accordion>
+                        </div>
+                        <!-- ----------- End tapedown sections ------------- -->
+
+                        <div class="col-md-6">
+                            <div ng-show="aSensor.SENSOR_TYPE_ID == 1">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Vented:</label>
+                                    <div class="col-md-7">
+                                        <span class="radio-inline">
+                                            <input type="radio" name="VENTED" ng-model="aSensor.VENTED" value="Yes" />Yes
+                                        </span>
+                                        <span class="radio-inline">
+                                            <input type="radio" name="VENTED" ng-model="aSensor.VENTED" value="No" />No
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Deployment Type: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label req" for="DEPLOYMENT_TYPE_ID">Deployment Type:</label>
+                                <div class="col-md-7">
+                                    <select class="form-control" id="DEPLOYMENT_TYPE_ID" name="DEPLOYMENT_TYPE_ID" ng-model="aSensor.DEPLOYMENT_TYPE_ID"
+                                            ng-options="dt.DEPLOYMENT_TYPE_ID as dt.METHOD for dt in filteredDeploymentTypes">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Location Description: -->
+                            <div class="form-group" ng-class="{'has-error':quickForm.quick.LOCATION_DESCRIPTION.$invalid && quickForm.quick.LOCATION_DESCRIPTION.$dirty}">
+                                <label class="col-md-4 control-label" for="LOCATION_DESCRIPTION">Location Description:</label>
+                                <div class="col-md-7">
+                                    <textarea class="form-control" id="LOCATION_DESCRIPTION" name="LOCATION_DESCRIPTION" type=" text" rows="3" ng-model="aSensor.LOCATION_DESCRIPTION" />
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Please be specific so someone else can find this sensor later. This field is public.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
+
+                            <!-- Interval: -->
+                            <div>
+                                <label class="col-md-4 control-label"></label>
+                                <div class="col-md-7">
+                                    <span class="radio-inline">
+                                        <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
+                                    </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom:0;padding-bottom:0">
+                                <label class="col-md-4 control-label" for="INTERVAL">Interval:</label>
+                                <div class="col-md-7">
+                                    <input class="form-control" ng-keypress="isNum($event)" name="INTERVAL" ng-model="aSensor.INTERVAL" type="text" />
+                                </div>
+                            </div>
+
+
+                            <!-- Deploy Time: * -->
+                            <div class="form-group required" ng-class="{'has-error':quickForm.quick.TIME_STAMP.$invalid && quickForm.quick.TIME_STAMP.$dirty}">
+                                <label class="col-md-4 control-label req" style="margin-top:6%" for="TIME_STAMP">Deploy Time:</label>
+                                <div class="col-md-7">
+                                    <datetimepicker hour-step="1" minute-step="1" ng-model="aSensStatus.TIME_STAMP" show-meridian="true"
+                                                    date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
+                                                    hidden-time="false" hidden-date="false" show-spinners="true" required>
+                                    </datetimepicker>
+                                </div>
+                            </div>
+
+                            <!-- Time Zone:* -->
+                            <div class="form-group required">
+                                <label class="col-md-4 control-label" for="TIME_ZONE">Time Zone:</label>
+                                <div class="col-md-7">
+                                    <select class="form-control" name="TIME_ZONE" ng-model="aSensStatus.TIME_ZONE"
+                                            ng-options="vcm for vcm in timeZoneList" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                                <button type="button" class="borderLess" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
+
+                            <!-- Note: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="NOTES">Note:</label>
+                                <div class="col-md-7">
+                                    <textarea class="form-control" name="NOTES" type=" text" rows="3" ng-model="aSensStatus.NOTES" />
+                                </div>
+                            </div>
+
+                            <!-- Collection Member: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">Deploy Member:</label>
+                                <div class="col-md-7" style="margin-top:14px;">
+                                    <input type="hidden" name="MEMBER_ID" ng-model="aSensStatus.MEMBER_ID" />
+                                    <span>{{loggedInMember.FNAME}} {{loggedInMember.LNAME}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-accordion-group>
+                </div> <!--end sensor-->
+            </uib-accordion>
+
+            <br clear="all" />
+
+            <!--submit and cancel buttons-->
+            <div class="form-group">
+                <div class="col-md-4 col-md-offset-2">
+                    <button class="btn btn-primary" style="width:80px;margin-right:10px" ng-click="create(quickForm.quick.$valid)">
+                        <span>Create</span>
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<div ng-if="!sessionEventExists">Please choose a Session Event in the upper right corner before creating a Quick {{CreateWhat}}.</div>

@@ -1,0 +1,783 @@
+<div class="panel-body">
+    <div class="wizard">
+        <a ui-sref=".reportDash" ui-sref-active="active">Reporting Dashboard</a>
+        <a ui-sref=".submitReport" ui-sref-active="active">Submit Report</a>
+        <a ui-sref=".generateReport" ui-sref-active="active">Generate Summary</a>
+    </div>
+    <div ui-view></div>
+</div>
+<style type="text/css">
+    /*table {
+        width:100%;
+        overflow:auto;
+        display:block;
+    }*/
+    .rep-dialog .modal-dialog {
+        width: 90%;
+        font-size: smaller;
+    }
+     @media print {
+        body * {
+            visibility: hidden;
+        }
+        .hidden-print {
+            display: none !important;
+        }
+        #print-content * {
+            visibility: visible;
+        }
+        .modal{
+            position: absolute;
+            left: 0;
+            top: 0;
+            margin: 0;
+            padding-right:20px;
+            /*padding: 0;*/
+            min-height:550px;
+            visibility: visible;
+            /**Remove scrollbar for printing.**/
+            overflow: visible !important;
+        }
+        .modal-dialog {            
+            width: 100%;
+            padding: 0;
+            margin:20px;                
+            visibility: visible !important;
+            /**Remove scrollbar for printing.**/
+            overflow: visible !important;
+        }
+        .modal-footer {
+            border-top:0;
+        }        
+    }
+</style>
+
+<!-- MODAL for "View" click of report -->
+<script type="text/ng-template" id="ViewReport.html">
+
+    <div id="print-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Short Term Network Modeling</h3>
+        </div>
+        <div class="modal-body">
+            <div class="container" id="jobSetupPrintPdf">
+                <div class="col-lg-12">
+                    <table id="Sec1PDF" class="table">
+                        <tr><label>Section 1: Report Parameters</label></tr>
+                        <tr style="border-bottom:solid thin #e2e2e2">
+                            <td><b>Date being reported:</b> {{ReportView.Report.REPORT_DATE | date: 'MM/dd/yyyy'}}</td>
+                            <td><b>Event:</b> {{ReportView.Report.EVENT_NAME}}</td>
+                            <td><b>State:</b> {{ReportView.Report.STATE}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="col-lg-6 pull-left">
+                    <table id="Sec2PDF" class="table">
+                        <tr><label>Section 2: Personnel and Vehicle Counts</label></tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td style="font-family: 'BryantBold';">Surfacewater</td>
+                            <td style="font-family: 'BryantBold';">Water Quality and Other</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Employees not accounted for</td>
+                            <td style="text-align:center">{{ReportView.Report.SW_FIELDPERS_NOTACCT}}</td>
+                            <td style="text-align:center">{{ReportView.Report.WQ_FIELDPERS_NOTACCT}}</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3">
+                                <span>Personnel in the field</span>
+                            </td>
+                            <td>Yesterday</td>
+                            <td style="text-align:center">{{ReportView.Report.SW_YEST_FIELDPERS}}</td>
+                            <td style="text-align:center">{{ReportView.Report.WQ_YEST_FIELDPERS}}</td>
+                        </tr>
+                        <tr>
+                            <td>Today</td>
+                            <td style="text-align:center">{{ReportView.Report.SW_TOD_FIELDPERS}}</td>
+                            <td style="text-align:center">{{ReportView.Report.WQ_TOD_FIELDPERS}}</td>
+                        </tr>
+                        <tr>
+                            <td>Tomorrow</td>
+                            <td style="text-align:center">{{ReportView.Report.SW_TMW_FIELDPERS}}</td>
+                            <td style="text-align:center">{{ReportView.Report.WQ_TMW_FIELDPERS}}</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3">Personnel in the office</td>
+                            <td>Yesterday</td>
+                            <td style="text-align:center">{{ReportView.Report.SW_YEST_OFFICEPERS}}</td>
+                            <td style="text-align:center">{{ReportView.Report.WQ_YEST_OFFICEPERS}}</td>
+                        </tr>
+                        <tr>
+                            <td>Today</td>
+                            <td style="text-align:center">{{ReportView.Report.SW_TOD_OFFICEPERS}}</td>
+                            <td style="text-align:center">{{ReportView.Report.WQ_TOD_OFFICEPERS}}</td>
+                        </tr>
+                        <tr>
+                            <td>Tomorrow
+                            <td style="text-align:center">{{ReportView.Report.SW_TMW_OFFICEPERS}}</td>
+                            <td style="text-align:center">{{ReportView.Report.WQ_TMW_OFFICEPERS}}</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3">Vehicles deployed</td>
+                            <td>Trucks & Cars</td>
+                            <td style="text-align:center">{{ReportView.Report.SW_AUTOS_DEPL}}</td>
+                            <td style="text-align:center">{{ReportView.Report.WQ_AUTOS_DEPL}}</td>
+                        </tr>
+                        <tr>
+                            <td>Boats</td>
+                            <td style="text-align:center">{{ReportView.Report.SW_BOATS_DEPL}}</td>
+                            <td style="text-align:center">{{ReportView.Report.WQ_BOATS_DEPL}}</td>
+                        </tr>
+                        <tr>
+                            <td>Other</td>
+                            <td style="text-align:center">{{ReportView.Report.SW_OTHER_DEPL}}</td>
+                            <td style="text-align:center">{{ReportView.Report.WQ_OTHER_DEPL}}</td>
+                        </tr>
+                    </table>
+
+                    <table id="Sec3PDF" class="table">
+                        <tr><label>Section 3: Instrumentation & Sampling Counts</label></tr>
+                        <tr>
+                            <td colspan="2" class="col-md-5">Gage visits (cumulative)</td>
+                            <td colspan="2" style="text-align:center" class="col-md-3">{{ReportView.Report.GAGE_VISIT}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Gages down at present</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.GAGE_DOWN}}</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">Discharge measurements</td>
+                            <td>To date</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.TOT_DISCHARGE_MEAS}}</td>
+                        </tr>
+                        <tr>
+                            <td>Planned</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.PLAN_DISCHARGE_MEAS}}</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">Check measurements</td>
+                            <td>To Date</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.TOT_CHECK_MEAS}}</td>
+                        </tr>
+                        <tr>
+                            <td>Planned</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.PLAN_CHECK_MEAS}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Indirect measurements planned</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.PLAN_INDIRECT_MEAS}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Rating extensions</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.RATING_EXTENS}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Peaks of record on gages to date </br>(>20 yrs of record)</td>
+                            <td style="text-align:center" colspan=" 2">{{ReportView.Report.GAGE_PEAK_RECORD}}</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">Rapid Deployment gages to date</td>
+                            <td>Planned</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.PLAN_RAPDEPL_GAGE}}</td>
+                        </tr>
+                        <tr>
+                            <td>Deployed</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.DEP_RAPDEPL_GAGE}}</td>
+                        </tr>
+                        <tr>
+                            <td>Recovered</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.REC_RAPDEPL_GAGE}}</td>
+                        </tr>
+                        <tr>
+                            <td>Lost</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.LOST_RAPDEPL_GAGE}}</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">Water Level Sensors to date</td>
+                            <td>Planned</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.PLAN_WTRLEV_SENSOR}}</td>
+                        </tr>
+                        <tr>
+                            <td>Deployed</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.DEP_WTRLEV_SENSOR}}</td>
+                        </tr>
+                        <tr>
+                            <td>Recovered</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.REC_WTRLEV_SENSOR}}</td>
+                        </tr>
+                        <tr>
+                            <td>Lost</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.LOST_WTRLEV_SENSOR}}</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">Wave Sensors to date</td>
+                            <td>Planned</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.PLAN_WV_SENS}}</td>
+                        </tr>
+                        <tr>
+                            <td>Deployed</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.DEP_WV_SENS}}</td>
+                        </tr>
+                        <tr>
+                            <td>Recovered</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.REC_WV_SENS}}</td>
+                        </tr>
+                        <tr>
+                            <td>Lost</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.LOST_WV_SENS}}</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">Barometers to date</td>
+                            <td>Planned</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.PLAN_BAROMETRIC}}</td>
+                        </tr>
+                        <tr>
+                            <td>Deployed</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.DEP_BAROMETRIC}}</td>
+                        </tr>
+                        <tr>
+                            <td>Recovered</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.REC_BAROMETRIC}}</td>
+                        </tr>
+                        <tr>
+                            <td>Lost</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.LOST_BAROMETRIC}}</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">Meteorological Sensors to date</td>
+                            <td>Planned</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.PLAN_METEOROLOGICAL}}</td>
+                        </tr>
+                        <tr>
+                            <td>Deployed</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.DEP_METEOROLOGICAL}}</td>
+                        </tr>
+                        <tr>
+                            <td>Recovered</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.REC_METEOROLOGICAL}}</td>
+                        </tr>
+                        <tr>
+                            <td>Lost</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.LOST_METEOROLOGICAL}}</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">Highwater Mark to date</td>
+                            <td>Flagged</td>
+                            <td style="text-align:center" colspan=" 2">{{ReportView.Report.HWM_FLAGGED}}</td>
+                        </tr>
+                        <tr>
+                            <td>Collected</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.HWM_COLLECTED}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">QW Gage visits (cumulative)</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.QW_GAGE_VISIT}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Continuous QW Gages visited</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.QW_CONT_GAGEVISIT}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Continuous QW Gages down</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.QW_GAGE_DOWN}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Discrete QW samples collected</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.QW_DISCR_SAMPLES}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Sediment samples collected</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.COLL_SEDSAMPLES}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="col-lg-6 pull-right">
+                    <table id="Sec4PDF" class="table">
+                        <tr><label>Section 4: Notes</label></tr>
+                        <tr><div>{{ReportView.Report.NOTES}}</div></tr>
+                    </table>
+
+                    <table id="Sec5PDF_Submit" class="table">
+                        <tr><label>Section 5: Contact Information</label></tr>
+                        <tr><td><label>Submitter</label></td><td></td></tr>
+                        <tr><td>Name</td><td>{{ReportView.submitter.mem.FNAME}} {{submitter.mem.LNAME}}</td></tr>
+                        <tr><td>Phone</td><td>{{ReportView.submitter.mem.PHONE}}</td></tr>
+                        <tr><td>Email</td><td>{{ReportView.submitter.mem.EMAIL}}</td></tr>
+                        <tr><td>Office Name</td><td>{{ReportView.submitter.AGENCY_NAME}}</td></tr>
+                        <tr><td>Office Address</td><td>{{ReportView.submitter.AGENCY_ADDRESS}}</td></tr>
+                    </table>
+
+                    <table ng-if="ReportView.deployStaff.FNAME != undefined" id="Sec5PDF_Deploy" class="table">
+                        <tr><td style="border:none"><label>Event Contacts</label></td></tr>
+                        <tr><td colspan="2"><label>Deployed Staff</label></td></tr>
+                        <tr><td>Name</td><td>{{ReportView.deployStaff.FNAME}} {{ReportView.deployStaff.LNAME}}</td></tr>
+                        <tr><td>Email</td><td>{{ReportView.deployStaff.EMAIL}}</td></tr>
+                        <tr><td>Phone</td><td>{{ReportView.deployStaff.PHONE}}</td></tr>
+                        <tr><td>Alternate Phone</td><td>{{ReportView.deployStaff.ALTERNATE_PHONE}}</td></tr>
+                    </table>
+
+                    <table ng-if="ReportView.generalStaff.FNAME != undefined" id="Sec5PDF_Gen" class="table">
+                        <tr><td colspan="2"><label>General Staff</label></td></tr>
+                        <tr><td>Name</td><td>{{ReportView.generalStaff.FNAME}} {{ReportView.generalStaff.LNAME}}</td></tr>
+                        <tr><td>Email</td><td>{{ReportView.generalStaff.EMAIL}}</td></tr>
+                        <tr><td>Phone</td><td>{{ReportView.generalStaff.PHONE}}</td></tr>
+                        <tr><td>Alternate Phone</td><td>{{ReportView.generalStaff.ALTERNATE_PHONE}}</td></tr>
+                    </table>
+
+                    <table ng-if="ReportView.inlandStaff.FNAME != undefined" id="Sec5PDF_Inland" class="table">
+                        <tr><td colspan="2"><label>Inland Staff</label></td></tr>
+                        <tr><td>Name</td><td>{{ReportView.inlandStaff.FNAME}} {{ReportView.inlandStaff.LNAME}}</td></tr>
+                        <tr><td>Email</td><td>{{ReportView.inlandStaff.EMAIL}}</td></tr>
+                        <tr><td>Phone</td><td>{{ReportView.inlandStaff.PHONE}}</td></tr>
+                        <tr><td>Alternate Phone</td><td>{{ReportView.inlandStaff.ALTERNATE_PHONE}}</td></tr>
+                    </table>
+
+                    <table ng-if="ReportView.coastStaff.FNAME != undefined" id="Sec5PDF_Coast" class="table">
+                        <tr><td colspan="2"><label>Coastal Staff</label></td></tr>
+                        <tr><td>Name</td><td>{{ReportView.coastStaff.FNAME}} {{ReportView.coastStaff.LNAME}}</td></tr>
+                        <tr><td>Email</td><td>{{ReportView.coastStaff.EMAIL}}</td></tr>
+                        <tr><td>Phone</td><td>{{ReportView.coastStaff.PHONE}}</td></tr>
+                        <tr><td>Alternate Phone</td><td>{{ReportView.coastStaff.ALTERNATE_PHONE}}</td></tr>
+                    </table>
+
+                    <table ng-if="ReportView.waterStaff.FNAME != undefined" id="Sec5PDF_Water" class="table">
+                        <tr><td colspan="2"><label>Water Staff</label></td></tr>
+                        <tr><td>Name</td><td>{{ReportView.waterStaff.FNAME}} {{ReportView.waterStaff.LNAME}}</td></tr>
+                        <tr><td>Email</td><td>{{ReportView.waterStaff.EMAIL}}</td></tr>
+                        <tr><td>Phone</td><td>{{ReportView.waterStaff.PHONE}}</td></tr>
+                        <tr><td>Alternate Phone</td><td>{{ReportView.waterStaff.ALTERNATE_PHONE}}</td></tr>
+                    </table>
+                </div>
+            </div>
+            <br clear="all" />
+
+            <div class="modal-footer hidden-print ">
+                <!--<a href="#" print="jobSetupPrintPdf"><button class="btn btn-primary">Print</button></a>-->
+                <button class="btn btn-primary" ng-click="print()">Print</button>
+                <button class="btn btn-primary" ng-click="ok()">OK</button>
+                <!--<button class="btn btn-warning" ng-click="cancel()">Cancel</button>-->
+            </div>
+        </div>
+    </div>
+
+</script>
+
+<!-- MODAL for "Display Metrics Summary" click -->
+<script type="text/ng-template" id="MetricsSummary.html">
+
+    <div id="print-content">
+        <div class="modal-header">
+            <h3 class="modal-title">USGS Flood Operations Monitoring</h3>
+        </div>
+        <div class="modal-body">
+            <div ng-show="Report.length > 0" class="" id="jobSetupPrintPdf1">
+                <div class="col-lg-12">
+                    <h3>USGS {{Event.Event.EVENT_NAME}} Report for {{Report[0].report.REPORT_DATE | date: 'MM/dd/yyyy'}}</h3>
+                    <table id="eventPart" class="table">
+                        <tr>
+                            <td class="col-lg-2">Event Description:</td>
+                            <td>{{Event.Event.EVENT_DESCRIPTION}}</td>
+                        </tr>
+                        <tr>
+                            <td>Event Type:</td>
+                            <td>{{Event.EventType.TYPE}}</td>
+                        </tr>
+                        <tr>
+                            <td>Event Status:</td>
+                            <td>{{Event.EventStat.STATUS}}</td>
+                        </tr>
+                        <tr>
+                            <td>Event Coordinator:</td>
+                            <td>{{Event.Coordinator.FNAME}} {{Event.Coordinator.LNAME}}, {{Event.CoordAgency.AGENCY_NAME}}, {{Event.Coordinator.EMAIL}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="col-lg-12">
+                    <table id="PeopleAssets" class="table table-bordered">
+                        <tr><label>Deployed Personnel and Assets</label></tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td>Employees not accounted for</td>
+                            <td colspan="4">Personnel in the Field</td>
+                            <td colspan="4">Personnel in the Office</td>
+                            <td colspan="3">Vehicles Deployed</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>Cumulative Person Days</td>
+                            <td>Yesterday</td>
+                            <td>Today</td>
+                            <td>Tomorrow</td>
+                            <td>Cumulative Person Days</td>
+                            <td>Yesterday</td>
+                            <td>Today</td>
+                            <td>Tomorrow</td>
+                            <td>Trucks & Cars</td>
+                            <td>Boats</td>
+                            <td>Other</td>
+                        </tr>
+                        <tbody ng-repeat="r in Report">
+                            <tr>
+                                <td style="vertical-align:middle" rowspan="2">{{r.report.STATE}}</td>
+                                <td class="col-lg-2">SW</td>
+                                <td style="text-align:center">{{r.report.SW_FIELDPERS_NOTACCT}}</td><!-- Not accounted for -->
+                                <td style="text-align:center">{{r.FieldPYesSWTot}}</td><!-- cumulative field -->
+                                <td style="text-align:center">{{r.report.SW_YEST_FIELDPERS}}</td><!-- yest field -->
+                                <td style="text-align:center">{{r.report.SW_TOD_FIELDPERS}}</td><!-- today field -->
+                                <td style="text-align:center">{{r.report.SW_TMW_FIELDPERS}}</td><!-- tomorrow field -->
+                                <td style="text-align:center">{{r.OfficePYesSWTot}}</td><!-- cumulative office -->
+                                <td style="text-align:center">{{r.report.SW_YEST_OFFICEPERS}}</td><!-- yest office -->
+                                <td style="text-align:center">{{r.report.SW_TOD_OFFICEPERS}}</td><!-- today office -->
+                                <td style="text-align:center">{{r.report.SW_TMW_OFFICEPERS}}</td><!-- tomorrow office -->
+                                <td style="text-align:center">{{r.report.SW_AUTOS_DEPL}}</td><!-- trucks/cars -->
+                                <td style="text-align:center">{{r.report.SW_BOATS_DEPL}}</td><!-- boats -->
+                                <td style="text-align:center">{{r.report.SW_OTHER_DEPL}}</td><!-- other -->
+                            </tr>
+                            <tr>
+                                <td>WQ & Other</td>
+                                <td style="text-align:center">{{r.report.WQ_FIELDPERS_NOTACCT}}</td><!-- Not accounted for -->
+                                <td style="text-align:center">{{r.FieldPYesWQTot}}</td><!-- cumulative field -->
+                                <td style="text-align:center">{{r.report.WQ_YEST_FIELDPERS}}</td><!-- yest field -->
+                                <td style="text-align:center">{{r.report.WQ_TOD_FIELDPERS}}</td><!-- today field -->
+                                <td style="text-align:center">{{r.report.WQ_TMW_FIELDPERS}}</td><!-- tomorrow field -->
+                                <td style="text-align:center">{{r.OfficePYesWQTot}}</td><!-- cumulative office -->
+                                <td style="text-align:center">{{r.report.WQ_YEST_OFFICEPERS}}</td><!-- yest office -->
+                                <td style="text-align:center">{{r.report.WQ_TOD_OFFICEPERS}}</td><!-- today office -->
+                                <td style="text-align:center">{{r.report.WQ_TMW_OFFICEPERS}}</td><!-- tomorrow office -->
+                                <td style="text-align:center">{{r.report.WQ_AUTOS_DEPL}}</td><!-- trucks/cars -->
+                                <td style="text-align:center">{{r.report.WQ_BOATS_DEPL}}</td><!-- boats -->
+                                <td style="text-align:center">{{r.report.WQ_OTHER_DEPL}}</td><!-- other -->
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        <th colspan="2">TOTALS</th>
+                        <th style="text-align:center">{{totals.notAcctForEmps}}</th>
+                        <th style="text-align:center">{{totals.cumPField}}</th>
+                        <th style="text-align:center">{{totals.yesPField}}</th>
+                        <th style="text-align:center">{{totals.todPField}}</th>
+                        <th style="text-align:center">{{totals.tomPField}}</th>
+                        <th style="text-align:center">{{totals.cumPOffice}}</th>
+                        <th style="text-align:center">{{totals.yesPOffice}}</th>
+                        <th style="text-align:center">{{totals.todPOffice}}</th>
+                        <th style="text-align:center">{{totals.tomPOffice}}</th>
+                        <th style="text-align:center">{{totals.truck}}</th>
+                        <th style="text-align:center">{{totals.boat}}</th>
+                        <th style="text-align:center">{{totals.other}}</th>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="col-lg-12">
+                    <table id="instrumentCounts1" class="table table-bordered">
+                        <tr><label>Instrumentation and Sampling Counts</label></tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>To Date</td>
+                            <td>Planned</td>
+                            <td>To Date</td>
+                            <td>Planned</td>
+                            <td colspan="8"></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Gage Visits</td>
+                            <td>Gages Down at Present</td>
+                            <td colspan="2">Discharge Measurements</td>
+                            <td colspan="2">Check Measurements</td>
+                            <td>Indirect Measurements</td>
+                            <td>Rate Extensions</td>
+                            <td>Peaks of Record</td>
+                            <td>QW Gage Visits</td>
+                            <td>Continuous QW Gages Visited</td>
+                            <td>Continuous QW Gages Down</td>
+                            <td>Discrete QW Samples Collected</td>
+                            <td>Sediment Samples Collected</td>
+                        </tr>
+                        <tbody ng-repeat="r in Report">
+                            <tr>
+                                <td>{{r.report.STATE}}</td>
+                                <td style="text-align:center">{{r.report.GAGE_VISIT}}</td>
+                                <td style="text-align:center">{{r.report.GAGE_DOWN}}</td>
+                                <td style="text-align:center">{{r.report.TOT_DISCHARGE_MEAS}}</td>
+                                <td style="text-align:center">{{r.report.PLAN_DISCHARGE_MEAS}}</td>
+                                <td style="text-align:center">{{r.report.TOT_CHECK_MEAS}}</td>
+                                <td style="text-align:center">{{r.report.PLAN_CHECK_MEAS}}</td>
+                                <td style="text-align:center">{{r.report.PLAN_INDIRECT_MEAS}}</td>
+                                <td style="text-align:center">{{r.report.RATING_EXTENS}}</td>
+                                <td style="text-align:center">{{r.report.GAGE_PEAK_RECORD}}</td>
+                                <td style="text-align:center">{{r.report.QW_GAGE_VISIT}}</td>
+                                <td style="text-align:center">{{r.report.QW_CONT_GAGEVISIT}}</td>
+                                <td style="text-align:center">{{r.report.QW_GAGE_DOWN}}</td>
+                                <td style="text-align:center">{{r.report.QW_DISCR_SAMPLES}}</td>
+                                <td style="text-align:center">{{r.report.COLL_SEDSAMPLES}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        <th>TOTALS</th>
+                        <th style="text-align:center">{{totals.gageVisits}}</th>
+                        <th style="text-align:center">{{totals.gagesDown}}</th>
+                        <th style="text-align:center">{{totals.disCtoDate}}</th>
+                        <th style="text-align:center">{{totals.disCPlanned}}</th>
+                        <th style="text-align:center">{{totals.CheckMeasToDate}}</th>
+                        <th style="text-align:center">{{totals.CheckMeasPlanned}}</th>
+                        <th style="text-align:center">{{totals.indMeas}}</th>
+                        <th style="text-align:center">{{totals.ratExt}}</th>
+                        <th style="text-align:center">{{totals.peaksOfRec}}</th>
+                        <th style="text-align:center">{{totals.QWGageVis}}</th>
+                        <th style="text-align:center">{{totals.contQWGageVis}}</th>
+                        <th style="text-align:center">{{totals.contQWGageDown}}</th>
+                        <th style="text-align:center">{{totals.disQWSamples}}</th>
+                        <th style="text-align:center">{{totals.sedSamples}}</th>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="col-lg-12">
+                    <table id="instrumentCounts2" class="table table-bordered table-condensed">
+                        <tr>
+                            <td></td>
+
+                            <td colspan="4">Rapid Deployment Gages</td>
+                            <td colspan="4">Water Level Sensors</td>
+                            <td colspan="4">Wave Sensors</td>
+                            <td colspan="4">Barometers</td>
+                            <td colspan="4">Meteorological Sensors</td>
+                            <td colspan="2">Highwater Marks</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Planned</td>
+                            <td>Deployed</td>
+                            <td>Recovered</td>
+                            <td>Lost</td>
+                            <td>Planned</td>
+                            <td>Deployed</td>
+                            <td>Recovered</td>
+                            <td>Lost</td>
+                            <td>Planned</td>
+                            <td>Deployed</td>
+                            <td>Recovered</td>
+                            <td>Lost</td>
+                            <td>Planned</td>
+                            <td>Deployed</td>
+                            <td>Recovered</td>
+                            <td>Lost</td>
+                            <td>Planned</td>
+                            <td>Deployed</td>
+                            <td>Recovered</td>
+                            <td>Lost</td>
+                            <td>Flagged</td>
+                            <td>Collected</td>
+                        </tr>
+                        <tbody ng-repeat="r in Report">
+                            <tr>
+                                <td>{{r.report.STATE}}</td>
+                                <td style="text-align:center">{{r.report.PLAN_RAPDEPL_GAGE}}</td>
+                                <td style="text-align:center">{{r.report.DEP_RAPDEPL_GAGE}}</td>
+                                <td style="text-align:center">{{r.report.REC_RAPDEPL_GAGE}}</td>
+                                <td style="text-align:center">{{r.report.LOST_RAPDEPL_GAGE}}</td>
+                                <td style="text-align:center">{{r.report.PLAN_WTRLEV_SENSOR}}</td>
+                                <td style="text-align:center">{{r.report.DEP_WTRLEV_SENSOR}}</td>
+                                <td style="text-align:center">{{r.report.REC_WTRLEV_SENSOR}}</td>
+                                <td style="text-align:center">{{r.report.LOST_WTRLEV_SENSOR}}</td>
+                                <td style="text-align:center">{{r.report.PLAN_WV_SENS}}</td>
+                                <td style="text-align:center">{{r.report.DEP_WV_SENS}}</td>
+                                <td style="text-align:center">{{r.report.REC_WV_SENS}}</td>
+                                <td style="text-align:center">{{r.report.LOST_WV_SENS}}</td>
+                                <td style="text-align:center">{{r.report.PLAN_BAROMETRIC}}</td>
+                                <td style="text-align:center">{{r.report.DEP_BAROMETRIC}}</td>
+                                <td style="text-align:center">{{r.report.REC_BAROMETRIC}}</td>
+                                <td style="text-align:center">{{r.report.LOST_BAROMETRIC}}</td>
+                                <td style="text-align:center">{{r.report.PLAN_METEOROLOGICAL}}</td>
+                                <td style="text-align:center">{{r.report.DEP_METEOROLOGICAL}}</td>
+                                <td style="text-align:center">{{r.report.REC_METEOROLOGICAL}}</td>
+                                <td style="text-align:center">{{r.report.LOST_METEOROLOGICAL}}</td>
+                                <td style="text-align:center">{{r.report.HWM_FLAGGED}}</td>
+                                <td style="text-align:center">{{r.report.HWM_COLLECTED}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        <th>TOTALS</th>
+                        <th style="text-align:center">{{totals.rdgPlan}}</th>
+                        <th style="text-align:center">{{totals.rdgDep}}</th>
+                        <th style="text-align:center">{{totals.rdgRec}}</th>
+                        <th style="text-align:center">{{totals.rdgLost}}</th>
+                        <th style="text-align:center">{{totals.waterPlan}}</th>
+                        <th style="text-align:center">{{totals.waterDep}}</th>
+                        <th style="text-align:center">{{totals.waterRec}}</th>
+                        <th style="text-align:center">{{totals.waterLost}}</th>
+                        <th style="text-align:center">{{totals.wavePlan}}</th>
+                        <th style="text-align:center">{{totals.waveDep}}</th>
+                        <th style="text-align:center">{{totals.waveRec}}</th>
+                        <th style="text-align:center">{{totals.waveLost}}</th>
+                        <th style="text-align:center">{{totals.baroPlan}}</th>
+                        <th style="text-align:center">{{totals.baroDep}}</th>
+                        <th style="text-align:center">{{totals.baroRec}}</th>
+                        <th style="text-align:center">{{totals.baroLost}}</th>
+                        <th style="text-align:center">{{totals.metPlan}}</th>
+                        <th style="text-align:center">{{totals.metDep}}</th>
+                        <th style="text-align:center">{{totals.metRec}}</th>
+                        <th style="text-align:center">{{totals.metLost}}</th>
+                        <th style="text-align:center">{{totals.hwmFlag}}</th>
+                        <th style="text-align:center">{{totals.hwmCol}}</th>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div ng-show="Report.length == 0">
+                <h4>No Reports match your filter choices.</h4>
+            </div>
+            <br clear="all" />
+
+            <div class="modal-footer hidden-print ">
+                <!--<a ng-if="Report.length > 0" href="#" print="jobSetupPrintPdf1"><button class="btn btn-primary">Print</button></a>-->
+                <button class="btn btn-primary" ng-click="print()">Print</button>
+                <button class="btn btn-primary" ng-click="ok()">OK</button>
+                <!--<button class="btn btn-warning" ng-click="cancel()">Cancel</button>-->
+            </div>
+        </div>
+    </div>
+</script>
+
+<!-- MODAL for "Display Contacts Summary" Click -->
+<script type="text/ng-template" id="ContactMetricsSummary.html">
+
+    <div id="print-content">
+        <div class="modal-header">
+            <h3 class="modal-title">USGS Flood Operations Monitoring</h3>
+        </div>
+        <div class="modal-body">
+            <div ng-show="Reports.length > 0" class="" id="jobSetupPrintPdf2">
+                <div class="col-lg-12">
+                    <h3>USGS {{Event.Event.EVENT_NAME}} Contacts Report for {{Reports[0].REPORT_DATE | date: 'MM/dd/yyyy'}}</h3>
+                    <table id="eventPart" class="table">
+                        <tr>
+                            <td class="col-lg-2">Event Description:</td>
+                            <td>{{Event.Event.EVENT_DESCRIPTION}}</td>
+                        </tr>
+                        <tr>
+                            <td>Event Type:</td>
+                            <td>{{Event.EventType.TYPE}}</td>
+                        </tr>
+                        <tr>
+                            <td>Event Status:</td>
+                            <td>{{Event.EventStat.STATUS}}</td>
+                        </tr>
+                        <tr>
+                            <td>Event Coordinator:</td>
+                            <td>{{Event.Coordinator.FNAME}} {{Event.Coordinator.LNAME}}, {{Event.CoordAgency.AGENCY_NAME}}, {{Event.Coordinator.EMAIL}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-lg-12" ng-repeat="r in Reports">
+                    <table class="table">
+                        <tr>
+                            <td colspan="6" style="text-align:center;border:thin solid black;background:steelblue"><label>{{r.State}}</label></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align:center;border:thin solid black"><label>Submitter</label></td>
+                            <td colspan="2" style="text-align:center;border:thin solid black"><label>Deployer</label></td>
+                            <td colspan="2" style="text-align:center;border:thin solid black"><label>General</label></td>
+                        </tr>
+                        <tr>
+                            <td style="width:10%;border-left:thin solid black;border-right:thin solid black">Name</td>
+                            <td style="border-right:thin solid black">{{r.submitter.FNAME}} {{r.submitter.LNAME}}</td>
+                            <td style="width:10%;border-left:thin solid black;border-right:thin solid black">Name</td>
+                            <td style="border-right:thin solid black">{{r.depC.FNAME}} {{r.depC.LNAME}}</td>
+                            <td style="width:10%;border-left:thin solid black;border-right:thin solid black">Name</td>
+                            <td style="border-right:thin solid black">{{r.genC.FNAME}} {{r.genC.LNAME}}</td>
+                        </tr>
+                        <tr>
+                            <td style="border-left:thin solid black;border-right:thin solid black">Phone</td>
+                            <td style="border-right:thin solid black">{{r.submitter.PHONE}}</td>
+                            <td style="border-left:thin solid black;border-right:thin solid black">Phone</td>
+                            <td style="border-right:thin solid black">{{r.depC.PHONE}}</td>
+                            <td style="border-left:thin solid black;border-right:thin solid black">Phone</td>
+                            <td style="border-right:thin solid black">{{r.genC.PHONE}}</td>
+                        </tr>
+                        <tr>
+                            <td style="border-left:thin solid black;border-right:thin solid black">Email</td>
+                            <td style="border-right:thin solid black">{{r.submitter.EMAIL}}</td>
+                            <td style="border-left:thin solid black;border-right:thin solid black">Alt Phone</td>
+                            <td style="border-right:thin solid black">{{r.depC.ALT_PHONE}}</td>
+                            <td style="border-left:thin solid black;border-right:thin solid black">Alt Phone</td>
+                            <td style="border-right:thin solid black">{{r.genC.ALT_PHONE}}</td>
+                        </tr>
+                        <tr>
+                            <td style="border-left:thin solid black;border-right:thin solid black">Office Name</td>
+                            <td style="border-right:thin solid black">{{r.submitter.OFFICENAME}}</td>
+                            <td style="border-bottom:thin solid black;border-right:thin solid black">Email</td>
+                            <td style="border-bottom:thin solid black;border-right:thin solid black">{{r.depC.EMAIL}}</td>
+                            <td style="border-bottom:thin solid black;border-right:thin solid black">Email</td>
+                            <td style="border-bottom:thin solid black;border-right:thin solid black">{{r.genC.EMAIL}}</td>
+                        </tr>
+                        <tr>
+                            <td style="border-left:thin solid black;border-bottom:thin solid black;border-right:thin solid black">Office Address</td>
+                            <td style="border-bottom:thin solid black;border-right:thin solid black">{{r.submitter.OFFICEADD}}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr></tr>
+
+                        <tr>
+                            <td colspan="2" style="text-align:center;border:thin solid black"><label>Inland Flood</label></td>
+                            <td colspan="2" style="text-align:center;border:thin solid black"><label>Coastal Flood</label></td>
+                            <td colspan="2" style="text-align:center;border:thin solid black"><label>Water Quality</label></td>
+                        </tr>
+                        <tr>
+                            <td style="border-left:thin solid black;border-right:thin solid black">Name</td>
+                            <td style="border-right:thin solid black">{{r.inlC.FNAME}} {{r.inlC.LNAME}}</td>
+                            <td style="border-left:thin solid black;border-right:thin solid black">Name</td>
+                            <td style="border-right:thin solid black">{{r.coastC.FNAME}} {{r.coastC.LNAME}}</td>
+                            <td style="border-left:thin solid black;border-right:thin solid black">Name</td>
+                            <td style="border-right:thin solid black">{{r.waterC.FNAME}} {{r.waterC.LNAME}}</td>
+                        </tr>
+                        <tr>
+                            <td style="border-left:thin solid black;border-right:thin solid black">Phone</td>
+                            <td style="border-right:thin solid black">{{r.inlC.PHONE}}</td>
+                            <td style="border-left:thin solid black;border-right:thin solid black">Phone</td>
+                            <td style="border-right:thin solid black">{{r.coastC.PHONE}}</td>
+                            <td style="border-left:thin solid black;border-right:thin solid black">Phone</td>
+                            <td style="border-right:thin solid black">{{r.waterC.PHONE}}</td>
+                        </tr>
+                        <tr>
+                            <td style="border-left:thin solid black;border-right:thin solid black">Alt Phone</td>
+                            <td style="border-right:thin solid black">{{r.inlC.ALT_PHONE}}</td>
+                            <td style="border-left:thin solid black;border-right:thin solid black">Alt Phone</td>
+                            <td style="border-right:thin solid black">{{r.coastC.ALT_PHONE}}</td>
+                            <td style="border-left:thin solid black;border-right:thin solid black">Alt Phone</td>
+                            <td style="border-right:thin solid black">{{r.waterC.ALT_PHONE}}</td>
+                        </tr>
+                        <tr>
+                            <td style="border-left:thin solid black;border-bottom:thin solid black;border-right:thin solid black">Email</td>
+                            <td style="border-right:thin solid black;border-bottom:thin solid black">{{r.inlC.EMAIL}}</td>
+                            <td style="border-left:thin solid black;border-bottom:thin solid black;border-right:thin solid black">Email</td>
+                            <td style="border-right:thin solid black;border-bottom:thin solid black">{{r.coastC.EMAIL}}</td>
+                            <td style="border-left:thin solid black;border-bottom:thin solid black;border-right:thin solid black">Email</td>
+                            <td style="border-right:thin solid black;border-bottom:thin solid black">{{r.waterC.EMAIL}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div ng-show="Reports.length == 0">
+                <h4>No Reports match your filter choices.</h4>
+            </div>
+            <br clear="all" />
+
+            <div class="modal-footer hidden-print">
+                <!--<a ng-if="Reports.length > 0" href="#" print="jobSetupPrintPdf2"><button class="btn btn-primary">Print</button></a>-->
+                <button class="btn btn-primary" ng-click="print()">Print</button>
+                <button class="btn btn-primary" ng-click="ok()">OK</button>
+                <!--<button class="btn btn-warning" ng-click="cancel()">Cancel</button>-->
+            </div>
+        </div>
+    </div>
+</script>

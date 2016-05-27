@@ -1,0 +1,50 @@
+<uib-accordion close-others="false">
+    <uib-accordion-group is-open="status.sensorOpen">
+        <uib-accordion-heading>
+            <span ng-click="getProposedSensors()">Proposed Sensors</span>
+            <i class="acc-heading-icon" ng-class="{'ion-arrow-down-b': status.siteOpen, 'ion-arrow-right-b': !status.siteOpen}"></i>
+        </uib-accordion-heading>
+        <div ng-if="thisSite.SITE_ID !== undefined">
+            <!-- proposed sensors here -->
+            <div ng-if="ProposedSensors4Site.length > 0">
+                <div ng-repeat="s in ProposedSensors4Site">
+                    <ul>
+                        <li>
+                            <span>{{s.Instrument.Deployment_Type || s.Instrument.Sensor_Type}} Sensor</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div ng-if="ProposedSensors4Site.length == 0">There are no proposed sensors at this site.</div>
+            <br clear="all" />
+            <div class="btn-group pull-right">
+                <div class="btn-group">
+                    <button type="button" ng-show="!showProposed" class="borderLess" ng-click="showHideProposed()" tooltip-append-to-body="true" tooltip-placement="right" uib-tooltip="Add a Proposed Sensors">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </div>
+            </div>
+            <div ng-show="showProposed">
+                <hr />
+                <ul style="padding-left:0">
+                    <li style="list-style:none;" ng-repeat="ps in deployTypeList">
+                        <input type="checkbox" ng-model="ps.selected" ng-click="" ng-value="{{ps.selected}}" />
+                        <span>{{ps.METHOD}}</span>
+                    </li>
+                </ul>
+                <div class="col-md-12 center-block">
+                    <span>
+                        <button type="button" class="btn btn-primary" style="width:80px;margin-right:10px" ng-click="AddProposed()">
+                            <span>Add</span>
+                        </button>
+                    </span>
+                    <span>
+                        <button type="button" class="btn btn-warning" style="width:80px;margin-right:10px" ng-click="cancelProposing()">
+                            <span>Cancel</span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div><!--end if there's a site clicked-->
+    </uib-accordion-group>
+</uib-accordion>

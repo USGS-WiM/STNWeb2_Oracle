@@ -1,0 +1,534 @@
+body {
+    overflow: auto;
+}
+
+@media (min-width: 1200px) {
+    .container {
+        width: 1800px !important;
+    }
+}
+.dateInputStyle::-webkit-calendar-picker-indicator {
+    /*styling to remove arrow from input type=date. use my own datepicker */
+    display: none;
+    -webkit-appearance: none;
+}
+form .ng-pristine.ng-invalid-required 
+{
+    box-shadow: none;
+}
+.topPad {
+    padding-top: 49px;
+}
+.borderLess {
+    background: none;
+    border: none;
+}
+/* carousel settings for label on photo files */
+.carousel-indicators {
+    bottom: 0 !important;
+}
+.carousel-caption {
+    padding: 0 !important;
+}
+.carousel-inner .active {
+    background: none !important;
+}
+
+.wizard a {
+    background: #efefef;
+    display: inline-block;
+   /* margin-right: 5px; */
+    min-width: 150px;
+    outline: none;
+    padding: 6px 24px 6px;
+    position: relative;
+    text-decoration: none;
+}
+.wizard .active {
+    background: #007ACC;
+    color: #fff;
+}
+.active {
+    background: #007ACC;
+    color: #fff;
+}
+span.required:after {
+    color: #d00;
+    content: "*";
+    position: static;
+    margin-left: 4px;
+    top:7px;
+}
+.form-group.required .control-label:after {
+    color: #d00;
+    content: "*";
+    position: static;
+    margin-left: 4px;
+    top:7px;
+}
+.stn-login-wrapper {
+    float:left;
+    background: #e0e0e0;
+    border-radius: 6px;
+    -moz-border-radius: 6px; /*firefox 3.6 and earlier */
+    border: darkgreen solid 1px;
+}
+.editable-checklist label {
+  display: block;
+}
+@media screen and (min-width: 1200px){
+    .stn-login-wrapper{ 
+        width:40%;
+        margin:2% 0 0 0; 
+        padding: 1%;
+        background:#e0e0e0;
+        border-radius:6px;
+        -moz-border-radius:6px;
+        border:darkgreen solid 1px;
+    }
+}
+@media screen and (max-width: 1200px){ 
+    .blog-login-wrapper{ 
+        width: 40%; 
+        margin: 2% 0 0 0; 
+        padding: 1%; 
+        background: #e0e0e0; 
+        border-radius: 6px; 
+        -moz-border-radius: 6px; /* Firefox 3.6 and earlier */ 
+        border: darkgreen solid 1px; 
+    } 
+}
+@media screen and (max-width: 600px) {
+    .blog-login-wrapper {
+        width: 80%;
+        margin: 2% 0 0 0;
+        padding: 1%;
+        background: #e0e0e0;
+        border-radius: 6px;
+        -moz-border-radius: 6px; /* Firefox 3.6 and earlier */
+        border: darkgreen solid 1px;
+    }
+}
+.stn-login-label {
+    float:left;
+    /*width:70%;
+    margin:0 0 0 15%;
+    padding: 1%;*/
+    /*text-align: center;*/
+}
+.stn-login-element {
+    float:left;
+    width:70%;
+    margin: 0 0 0 15%;
+    padding: 1% 0 0 0;
+    text-align: center;
+}
+.stn-login-button {
+    float: left; 
+    width: 100%; 
+    margin: 0 0 0 0; 
+    padding: 5% 0 0 0; 
+    text-align: center; 
+} 
+.blog-login-error{ 
+    float: left; 
+    width: 100%; 
+    margin: 0 0 0 0; 
+    padding: 0 0 0 0; 
+    text-align: center; 
+    color: red;
+} 
+.hidden {
+  display: none !important;
+  visibility: hidden !important;
+}
+.loading
+{
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:rgba(255,255,255,0.8);
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#4cffffff', endColorstr='#4cffffff'); /* IE */
+    z-index:9999;
+}
+.loadingcontent
+{
+    display:table;
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+}
+.loadingspinner
+{
+   display: table-cell;
+   vertical-align:middle;
+   width: 100%;
+   text-align: center;
+   font-size:larger;
+   padding-top:80px;
+}
+a.disabled {
+    color: #AAAAAA;
+    cursor: default;
+    pointer-events: none;
+    text-decoration: none;
+}
+.myGrid {
+    width: 100%;
+    /*height: 250px;*/
+  }
+
+/*!
+ * Start Bootstrap - Simple Sidebar HTML Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+/* Toggle Styles */
+
+#wrapper {
+    padding-left: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled {
+    padding-left: 250px;
+}
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: absolute; /*set to absolute instead of fixed because wasn't scrolling for long sidebar*/
+    left: 250px;
+    margin-left: -130px;
+    width: 0;
+    height: 100%;
+    overflow-y: auto;
+    background: #000;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 250px;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    position: absolute;
+    padding: 15px;
+}
+
+#wrapper.toggled #page-content-wrapper {
+    position: absolute;
+    margin-right: -250px;
+}
+
+/* Sidebar Styles */
+
+.sidebar-nav {
+    position: absolute;
+    top: 0;
+    width: 250px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-nav li {
+    text-indent: 20px;
+    line-height: 40px;
+}
+
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    color: #999999;
+}
+
+.sidebar-nav li a:hover {
+    text-decoration: none;
+    color: #fff;
+    background: rgba(255,255,255,0.2);
+}
+
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+    text-decoration: none;
+    color: #fff;
+    background: rgba(255,255,255,0.2);
+}
+
+.sidebar-nav > .sidebar-brand {
+    height: 65px;
+    font-size: 18px;
+    line-height: 60px;
+}
+
+.sidebar-nav > .sidebar-brand a {
+    color: #999999;
+}
+
+.sidebar-nav > .sidebar-brand a:hover {
+    color: #fff;
+    background: none;
+}
+
+@media(min-width:768px) {
+    #wrapper {
+        padding-left: 250px;
+    }
+
+    #wrapper.toggled {
+        padding-left: 0;
+    }
+
+    #sidebar-wrapper {
+        width: 250px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+
+    #page-content-wrapper {
+        padding: 20px;
+        position: relative;
+    }
+
+    #wrapper.toggled #page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+    #Sec1PDF td, #Sec2PDF td, #Sec3PDF td, #Sec5PDF td {
+        line-height: 10px;
+    }
+    #Sec1PDF thead tr, #Sec2PDF thead tr, #Sec3PDF thead tr, #Sec4PDF thead tr, #Sec5PDF thead tr {
+        margin-bottom: 5px;
+    }
+}
+
+.container {
+    width:100%
+}
+
+.stnSiteIcon {
+    border-radius: 120px;
+    opacity: .75;
+    background-color: #0000FF;
+}
+
+.newSiteIcon {
+    border-radius: 120px;
+    border-color: black;
+    opacity: 1;
+    /*background-color: #FF0000;*/
+    /*background-color : #d9534f;*/
+    /*background-color: #f0ad4e;*/
+    background-color: #F7AB02;
+}
+
+.selectedIcon {
+    border-radius: 120px;
+    opacity: 1;
+    background-color: #000099;
+}
+
+
+.mapJumbotron {
+    padding: 5px !important;
+}
+
+.mapContainer {
+    padding:0px !important;
+}
+
+.leaflet-label {
+    z-index: 9999;
+}
+
+.siteLabel {
+    background-color: rgb(235,235,235) !important;
+    border-color: rgba(0,0,153,0.25);
+    color: #000099 !important;
+    font-size: 90% !important;
+}
+
+.newSiteLabel {
+    /*background-color: rgb(235,235,235) !important;*/
+    background-color: #F7AB02;
+    /*border-color: rgba(217,83,79,0.25);*/
+    border-color: rgba(247,171,2, 0.25);
+    /*color:  #d9534f !important;*/
+    /*color: #f0ad4e !important;*/
+    color: #fff;
+    font-size: 90% !important;
+}
+
+/*.createSiteModeIndicator {*/
+    /*!*width: 50px;*!*/
+    /*!*height: 25px;*!*/
+    /*visibility: hidden;*/
+    /*display: inline;*/
+    /*padding: .2em .6em .3em;*/
+    /*font-size: 150%;*/
+    /*font-weight: bold;*/
+    /*line-height: 1;*/
+    /*color: #fff;*/
+    /*text-align: center;*/
+    /*white-space: nowrap;*/
+    /*vertical-align: baseline;*/
+    /*border-radius: .25em;*/
+    /*!*background-color: #f0ad4e;*!*/
+    /*background-color : #d9534f;*/
+/*}*/
+
+/*.createSiteModeIndicator::before{*/
+    /*content: "CREATE SITE MODE ACTIVE"*/
+/*}*/
+
+.createSiteModeActive {
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 150%;
+    font-weight: bold;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    /*border-radius: .25em;*/
+    /*border-top-left-radius:.25em;*/
+    /*border-top-right-radius:.25em;*/
+    /*background-color: #f0ad4e;*/
+    /*background-color : #d9534f;*/
+    background-color :#F7AB02;
+}
+
+.createSiteModeActiveTop{
+    border-top-left-radius:.25em;
+    border-top-right-radius:.25em;
+ }
+
+.createSiteModeActiveBottom{
+    border-bottom-left-radius:.25em;
+    border-bottom-right-radius:.25em;
+}
+
+.mapCreateSiteButtonsDiv {
+    margin-top:1.5em;
+}
+
+#site-loading
+{
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    /*background:rgba(255,255,255,0.8);*/
+    background:rgba(25,55,255,0.8);
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#4cffffff', endColorstr='#4cffffff'); /* IE */
+    z-index:1000;
+}
+#site-loadingcontent
+{
+    display:table;
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+}
+#site-loadingspinner
+{
+    display: table-cell;
+    vertical-align:middle;
+    width: 100%;
+    text-align: center;
+    font-size:larger;
+    padding-top:80px;
+}
+
+.arrow-up {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid black;
+    border-style: solid;
+    border-width: 0 5px 8.7px 5px;
+    border-color: transparent transparent #000000 transparent;
+}
+
+.leaflet-popup-content {
+    width:auto !important;
+}
+
+
+.info {
+    padding: 20px;
+    font-family: sans-serif;
+    font-size: 1em;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+}
+.info h4 {
+    margin: 0 0 5px;
+    color: #3D3938;
+}
+
+.legend-esri {
+    color: #555555;
+    line-height: 18px;
+    max-height: 250px;
+    width: 215px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    overflow: auto;
+}
+.legend-esri .outline {
+    border: 1px solid #CCCCCC;
+    border-radius: 6px 6px 6px 6px;
+    float: left;
+    height: 12px;
+    margin: 3px 10px 3px 3px;
+    padding: 2px;
+    width: 12px;
+}
+.legend-esri .outline i {
+    border-radius: 4px 4px 4px 4px;
+    float: left;
+    height: 6px;
+    width: 6px;
+}
+.legend-esri .inline {
+    clear: both;
+    float: left;
+    margin-right: 10px;
+}
+.legend-esri .info-title {
+    clear: both;
+    float: left;
+    font-size: 0.9em;
+    font-weight: bold;
+    margin: 5px 0;
+    width: 100%;
+}
+.legend-esri .info-label {
+    float: left;
+    width: 170px;
+    font-size: 0.8em;
+}
+
+.angular-leaflet-control-layers-expanded {
+    width: 300px;
+}

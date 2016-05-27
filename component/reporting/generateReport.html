@@ -1,0 +1,73 @@
+
+<style type="text/css">
+    .panel {
+        margin-bottom:0;
+    }
+</style>
+<!--Section 1: Start Report-->
+<form name="genReportForm">
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4 class="panel-title">Select Event, Date, and State(s)</h4></div>
+        <div class="panel-body">
+            <div class="form-group col-md-12 required">
+                <label class="col-md-12 control-label req" for="EVENT_ID">Event:</label>
+                <div class="col-md-4">
+                    <select class="form-control" id="EVENT_ID" name="EVENT_ID" ng-change="genRepChange()"
+                            ng-model="genSummary.EVENT_ID" ng-options="e.EVENT_ID as e.EVENT_NAME for e in events" required>
+                        <option value="">Select an event</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group col-md-12 required">
+                <label class="col-md-12 control-label req" for="SUM_DATE">Date:</label>
+                <div class="col-md-3 input-group" style="padding-left:15px;padding-right:15px;">
+                    <input datepicker-append-to-body="true" class="form-control dateInputStyle" id="SUM_DATE" show-weeks="false" name="sd" type="date" uib-datepicker-popup="MM/dd/yyyy"
+                           is-open="datepickrs.sd" ng-model="genSummary.SUM_DATE" required />
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" ng-click="open($event, 'sd')">
+                            <i class="glyphicon glyphicon-calendar" />
+                        </button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group col-md-12">
+                <label class="col-md-12 control-label" for="SUM_STATE">State:</label>
+                <div class="col-md-6">
+                    <div isteven-multi-select
+                         input-model="states"
+                         output-model="Statemodel.value"
+                         button-label="STATE_NAME"
+                         item-label="STATE_NAME"
+                         max-height="300px"
+                         on-close="genRepChange( data )"
+                         tick-property="selected"
+                         helper-elements="filter none"
+                         output-properties="STATE_NAME STATE_ABBREV">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4 class="panel-title">Confirm Selections</h4></div>
+        <div class="panel-body">
+            <div class="col-md-12"><label class="col-md-1">Event:</label><span class="col-md-11">{{EventName.EVENT_NAME}}</span></div>
+            <div class="col-md-12"><label class="col-md-1">Date:</label><span class="col-md-11">{{genSummary.SUM_DATE | date: 'MM/dd/yyyy'}}</span></div>
+            <div class="col-md-12"><label class="col-md-1">State(s):</label><span class="col-md-11">{{StateNames}}</span></div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4 class="panel-title">Select Desired Output for Completed Reports matching above specifications</h4></div>
+        <div class="panel-body">
+            <button class="btn btn-primary" ng-click="displayMetricSum(genReportForm.$valid)">Display Metrics Summary</button>
+            <button class="btn btn-primary" ng-click="displayContactsSum(genReportForm.$valid)">Display Contacts Summary</button>
+            <!--<button class="btn btn-primary" ng-click="getCSVfile(genReportForm.$valid)">Generate CSV Summary</button>-->
+            <a class="btn btn-primary" ng-href="{{serverURL}}/ReportingMetrics/FilteredReports.csv?Event={{genSummary.EVENT_ID}}&States={{StateAbbrevs}}&Date={{genSummary.SUM_DATE | date: 'MM/dd/yyyy'}}" target="_blank">Download CSV Summary</a>
+        </div>
+    </div>
+</form>
+
+

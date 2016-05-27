@@ -1,0 +1,97 @@
+<div ng-if="accountRole == 'Admin'">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width:0"></th>
+                <th>Vertical Datum Name</th>
+                <th>Vertical Datum Abbreviation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="vd in vertDatList | orderBy: 'DATUM_ID'">
+                <td style="white-space: nowrap">
+                    <!-- form -->
+                    <form editable-form name="VDrowform" onaftersave="saveVertDatum($data, vd.DATUM_ID)" ng-show="VDrowform.$visible" class="form-buttons form-inline" shown="inserted == vd">
+                        <button type="submit" ng-disabled="VDrowform.$waiting" class="btn btn-primary">
+                            save
+                        </button>
+                        <button type="button" ng-disabled="VDrowform.$waiting" ng-click="VDrowform.$cancel()" class="btn btn-default">
+                            cancel
+                        </button>
+                    </form>
+                    <div class="buttons" ng-show="!VDrowform.$visible">
+                        <button class="btn btn-primary" ng-click="VDrowform.$show()">edit</button>
+                        <button class="btn btn-danger" ng-click="deleteVertDatum(vd)">del</button>
+                    </div>
+                </td>
+                <td>
+                    <div style="display:none"><span editable-text="vd.DATUM_ID" e-form="VDrowform" e-name="DATUM_ID">{{vd.DATUM_ID}}</span></div>
+                    <span editable-text="vd.DATUM_NAME" e-name="DATUM_NAME" e-form="VDrowform">{{ vd.DATUM_NAME || '' }}</span>
+                </td>
+                <td>
+                    <span editable-text="vd.DATUM_ABBREVIATION" e-name="DATUM_ABBREVIATION" e-form="VDrowform">{{ vd.DATUM_ABBREVIATION || '' }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    <button ng-show="addVDButtonShowing" class="btn btn-primary" ng-click="showAddVDClicked()">Add New Vertical Datum</button>
+
+    <div ng-show="showAddVDForm">
+        <form class="form-horizontal" name="lookupForm.vertDFm">
+            <fieldset>
+
+                <div class="form-group required">
+                    <label class="col-md-3 control-label req" for="DATUM_NAME">Vertical Datum Name:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="DATUM_NAME" name="DATUM_NAME" type="text" placeholder="" ng-model="newVD.DATUM_NAME" required />
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label class="col-md-3 control-label req" for="DATUM_ABBREVIATION">Vertical Datum Abbreviation:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="DATUM_ABBREVIATION" name="DATUM_ABBREVIATION" type="text" placeholder="" ng-model="newVD.DATUM_ABBREVIATION" required />
+                    </div>
+                </div>
+
+
+                <!--submit button-->
+                <div class="form-group">
+                    <div class="col-md-2 col-md-offset-2">
+                        <span>
+                            <button class="btn btn-primary" ng-click="AddVertDatum(lookupForm.vertDFm.$valid, newVD)">
+                                Add
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form><button class="btn btn-default center-block" style="margin-top:-48px;" ng-click="NeverMindVD()">
+            Never Mind
+        </button>
+    </div>
+</div><!--end admin view-->
+<div ng-if="accountRole !='Admin'">
+    <script>
+        var sortingOrder = 'DATUM_NAME';
+    </script>
+
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th class="DATUM_NAME">Vertical Datum Name&nbsp;<a ng-click="sort_by('DATUM_NAME')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                <th class="DATUM_ABBREVIATION">Vertical Datum Abbreviation&nbsp;<a ng-click="sort_by('DATUM_ABBREVIATION')"><i class="glyphicon glyphicon-sort"></i></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="vd in vertDatList | orderBy:sortingOrder:reverse">
+                <td>{{ vd.DATUM_NAME || '' }}</td>
+                <td>{{ vd.DATUM_ABBREVIATION || '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

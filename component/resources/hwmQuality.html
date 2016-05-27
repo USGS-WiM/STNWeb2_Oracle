@@ -1,0 +1,85 @@
+<div ng-if="accountRole == 'Admin'">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width:0"></th>
+                <th>HWM Quality</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="hwmq in hwmQualList | orderBy: 'HWM_QUALITY_ID'">
+                <td style="white-space: nowrap">
+                    <!-- form -->
+                    <form editable-form name="HWMQrowform" onaftersave="saveHwmQuality($data, hwmq.HWM_QUALITY_ID)" ng-show="HWMQrowform.$visible" class="form-buttons form-inline" shown="inserted == hwmq">
+                        <button type="submit" ng-disabled="HWMQrowform.$waiting" class="btn btn-primary">
+                            save
+                        </button>
+                        <button type="button" ng-disabled="HWMQrowform.$waiting" ng-click="HWMQrowform.$cancel()" class="btn btn-default">
+                            cancel
+                        </button>
+                    </form>
+                    <div class="buttons" ng-show="!HWMQrowform.$visible">
+                        <button class="btn btn-primary" ng-click="HWMQrowform.$show()">edit</button>
+                        <button class="btn btn-danger" ng-click="deleteHwmQuality(hwmq)">del</button>
+                    </div>
+                </td>
+                <td>
+                    <div style="display:none"><span editable-text="hwmq.HWM_QUALITY_ID" e-form="HWMQrowform" e-name="HWM_QUALITY_ID">{{hwmq.HWM_QUALITY_ID}}</span></div>
+                    <span editable-text="hwmq.HWM_QUALITY" e-name="HWM_QUALITY" e-form="HWMQrowform">{{ hwmq.HWM_QUALITY || '' }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    <button ng-show="addHWMQButtonShowing" class="btn btn-primary" ng-click="showAddHWMQClicked()">Add New HWM Quality</button>
+
+    <div ng-show="showAddHWMQForm">
+        <form class="form-horizontal" name="lookupForm.hwmQualFm">
+            <fieldset>
+
+                <div class="form-group required">
+                    <label class="col-md-3 control-label req" for="STATUS">HWM Quality:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="HWM_QUALITY" name="HWM_QUALITY" type="text" placeholder="" ng-model="newHWMQ.HWM_QUALITY" required />
+                    </div>
+                </div>
+
+
+                <!--submit button-->
+                <div class="form-group">
+                    <div class="col-md-2 col-md-offset-2">
+                        <span>
+                            <button class="btn btn-primary" ng-click="AddHwmQuality(lookupForm.hwmQualFm.$valid, newHWMQ)">
+                                Add
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form><button class="btn btn-default center-block" style="margin-top:-48px;" ng-click="NeverMindHWMQ()">
+            Never Mind
+        </button>
+    </div>
+</div><!--end admin view-->
+<div ng-if="accountRole !='Admin'">
+    <script>
+        var sortingOrder = 'HWM_QUALITY';
+    </script>
+
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th class="HWM_QUALITY">HWM Quality&nbsp;<a ng-click="sort_by('HWM_QUALITY')"><i class="glyphicon glyphicon-sort"></i></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="hwmq in hwmQualList | orderBy:sortingOrder:reverse">
+                <td>{{ hwmq.HWM_QUALITY || '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

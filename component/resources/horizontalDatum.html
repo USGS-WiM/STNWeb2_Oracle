@@ -1,0 +1,98 @@
+<div ng-if="accountRole == 'Admin'">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width:0"></th>
+                <th>Horizontal Datum</th>
+                <th>Horizontal Abbreviation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="hd in horDatList | orderBy: 'DATUM_NAME'">
+                <td style="white-space: nowrap">
+                    <!-- form -->
+                    <form editable-form name="HDrowform" onaftersave="saveHorDatum($data, hd.DATUM_ID)" ng-show="HDrowform.$visible" class="form-buttons form-inline" shown="inserted == hd">
+                        <button type="submit" ng-disabled="HDrowform.$waiting" class="btn btn-primary">
+                            save
+                        </button>
+                        <button type="button" ng-disabled="HDrowform.$waiting" ng-click="HDrowform.$cancel()" class="btn btn-default">
+                            cancel
+                        </button>
+                    </form>
+                    <div class="buttons" ng-show="!HDrowform.$visible">
+                        <button class="btn btn-primary" ng-click="HDrowform.$show()">edit</button>
+                        <button class="btn btn-danger" ng-click="deleteHorDatum(hd)">del</button>
+                    </div>
+                </td>
+                <td>
+                    <div style="display:none"><span editable-text="hd.DATUM_ID" e-form="HDrowform" e-name="DATUM_ID">{{hd.DATUM_ID}}</span></div>
+                    <span editable-text="hd.DATUM_NAME" e-name="DATUM_NAME" e-form="HDrowform">{{ hd.DATUM_NAME || '' }}</span>
+                </td>
+                <td>
+                    <span editable-text="hd.DATUM_ABBREVIATION" e-name="DATUM_ABBREVIATION" e-form="HDrowform">{{ hd.DATUM_ABBREVIATION || '' }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    <button ng-show="addHDButtonShowing" class="btn btn-primary" ng-click="showAddHDClicked()">Add New Horizontal Datum</button>
+
+    <div ng-show="showAddHDForm">
+        <form class="form-horizontal" name="lookupForm.horDatumFm">
+            <fieldset>
+
+                <div class="form-group required">
+                    <label class="col-md-3 control-label req" for="DATUM_NAME">Horizontal Datum Name:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="DATUM_NAME" name="DATUM_NAME" type="text" placeholder="" ng-model="newHD.DATUM_NAME" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="DATUM_ABBREVIATION">Horizontal Datum Abbreviation:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="DATUM_ABBREVIATION" name="DATUM_ABBREVIATION" type="text" placeholder="" ng-model="newHD.DATUM_ABBREVIATION" />
+                    </div>
+                </div>
+
+
+                <!--submit button-->
+                <div class="form-group">
+                    <div class="col-md-2 col-md-offset-2">
+                        <span>
+                            <button class="btn btn-primary" ng-click="AddHorDatum(lookupForm.horDatumFm.$valid, newHD)">
+                                Add
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form><button class="btn btn-default center-block" style="margin-top:-48px;" ng-click="NeverMindHD()">
+            Never Mind
+        </button>
+    </div>
+</div><!--end admin view-->
+<div ng-if="accountRole !='Admin'">
+    <script>
+        var sortingOrder = 'DATUM_NAME';
+    </script>
+
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th class="DATUM_NAME">Horizontal Datum&nbsp;<a ng-click="sort_by('DATUM_NAME')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                <th class="DATUM_ABBREVIATION">Horizontal Abbreviation&nbsp;<a ng-click="sort_by('DATUM_ABBREVIATION')"><i class="glyphicon glyphicon-sort"></i></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="hd in horDatList | orderBy:sortingOrder:reverse">
+                <td>{{ hd.DATUM_NAME || '' }}</td>
+                <td>{{ hd.DATUM_ABBREVIATION || '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

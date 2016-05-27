@@ -1,0 +1,85 @@
+<div ng-if="accountRole == 'Admin'">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width:0"></th>
+                <th>File Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="ft in fileTypeList | orderBy: 'FILETYPE'">
+                <td style="white-space: nowrap">
+                    <!-- form -->
+                    <form editable-form name="FTrowform" onaftersave="saveFileType($data, ft.FILETYPE_ID)" ng-show="FTrowform.$visible" class="form-buttons form-inline" shown="inserted == ft">
+                        <button type="submit" ng-disabled="FTrowform.$waiting" class="btn btn-primary">
+                            save
+                        </button>
+                        <button type="button" ng-disabled="FTrowform.$waiting" ng-click="FTrowform.$cancel()" class="btn btn-default">
+                            cancel
+                        </button>
+                    </form>
+                    <div class="buttons" ng-show="!FTrowform.$visible">
+                        <button class="btn btn-primary" ng-click="FTrowform.$show()">edit</button>
+                        <button class="btn btn-danger" ng-click="deleteFileType(ft)">del</button>
+                    </div>
+                </td>
+                <td>
+                    <div style="display:none"><span editable-text="ft.FILETYPE_ID" e-form="FTrowform" e-name="FILETYPE_ID">{{ft.FILETYPE_ID}}</span></div>
+                    <span editable-text="ft.FILETYPE" e-name="FILETYPE" e-form="FTrowform">{{ ft.FILETYPE || '' }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    <button ng-show="addFTButtonShowing" class="btn btn-primary" ng-click="showAddFTClicked()">Add New File Type</button>
+
+    <div ng-show="showAddFTForm">
+        <form class="form-horizontal" name="lookupForm.fileTypeFm">
+            <fieldset>
+
+                <div class="form-group required">
+                    <label class="col-md-3 control-label req" for="FILETYPE">File Type:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="FILETYPE" name="FILETYPE" type="text" placeholder="" ng-model="newFT.FILETYPE" required />
+                    </div>                    
+                </div>
+
+
+                <!--submit button-->
+                <div class="form-group">
+                    <div class="col-md-2 col-md-offset-2">
+                        <span>
+                            <button class="btn btn-primary" ng-click="AddFileType(lookupForm.fileTypeFm.$valid, newFT)">
+                                Add
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form><button class="btn btn-default center-block" style="margin-top:-48px;" ng-click="NeverMindFT()">
+            Never Mind
+        </button>
+    </div>
+</div><!--end admin view-->
+<div ng-if="accountRole !='Admin'">
+    <script>
+        var sortingOrder = 'FILETYPE';
+    </script>
+
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th class="FILETYPE">File Type&nbsp;<a ng-click="sort_by('FILETYPE')"><i class="glyphicon glyphicon-sort"></i></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="ft in fileTypeList | orderBy:sortingOrder:reverse">
+                <td>{{ ft.FILETYPE || '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

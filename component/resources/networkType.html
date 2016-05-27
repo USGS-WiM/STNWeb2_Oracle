@@ -1,0 +1,85 @@
+<div ng-if="accountRole == 'Admin'">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width:0"></th>
+                <th>Site Location Type in Network</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="nt in netTypeList | orderBy: 'NETWORK_TYPE_NAME'">
+                <td style="white-space: nowrap">
+                    <!-- form -->
+                    <form editable-form name="ESrowform" onaftersave="saveNetType($data, nt.NETWORK_TYPE_ID)" ng-show="ESrowform.$visible" class="form-buttons form-inline" shown="inserted == nt">
+                        <button type="submit" ng-disabled="ESrowform.$waiting" class="btn btn-primary">
+                            save
+                        </button>
+                        <button type="button" ng-disabled="ESrowform.$waiting" ng-click="ESrowform.$cancel()" class="btn btn-default">
+                            cancel
+                        </button>
+                    </form>
+                    <div class="buttons" ng-show="!ESrowform.$visible">
+                        <button class="btn btn-primary" ng-click="ESrowform.$show()">edit</button>
+                        <button class="btn btn-danger" ng-click="deleteNetType(nt)">del</button>
+                    </div>
+                </td>
+                <td>
+                    <div style="display:none"><span editable-text="nt.NETWORK_TYPE_ID" e-form="ESrowform" e-name="NETWORK_TYPE_ID">{{nt.NETWORK_TYPE_ID}}</span></div>
+                    <span editable-text="nt.NETWORK_TYPE_NAME" e-name="NETWORK_TYPE_NAME" e-form="ESrowform">{{ nt.NETWORK_TYPE_NAME || '' }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    <button ng-show="addNTButtonShowing" class="btn btn-primary" ng-click="showAddNTClicked()">Add New Site Location Type in Network</button>
+
+    <div ng-show="showAddNTForm">
+        <form class="form-horizontal" name="lookupForm.netTypeFm">
+            <fieldset>
+
+                <div class="form-group required">
+                    <label class="col-md-3 control-label req" for="STATUS">Site Location Type in Network:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="NETWORK_TYPE_NAME" name="NETWORK_TYPE_NAME" type="text" placeholder="" ng-model="newNT.NETWORK_TYPE_NAME" required />
+                    </div>
+                </div>
+
+
+                <!--submit button-->
+                <div class="form-group">
+                    <div class="col-md-2 col-md-offset-2">
+                        <span>
+                            <button class="btn btn-primary" ng-click="AddNetType(lookupForm.netTypeFm.$valid, newNT)">
+                                Add
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form><button class="btn btn-default center-block" style="margin-top:-48px;" ng-click="NeverMindNT()">
+            Never Mind
+        </button>
+    </div>
+</div><!--end admin view-->
+<div ng-if="accountRole !='Admin'">
+    <script>
+        var sortingOrder = 'NETWORK_TYPE_NAME';
+    </script>
+
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th class="NETWORK_TYPE_NAME">Site Location Type in Network&nbsp;<a ng-click="sort_by('NETWORK_TYPE_NAME')"><i class="glyphicon glyphicon-sort"></i></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="nt in netTypeList | orderBy:sortingOrder:reverse">
+                <td>{{ nt.NETWORK_TYPE_NAME || '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

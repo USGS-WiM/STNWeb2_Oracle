@@ -1,0 +1,48 @@
+<div class="map-page-wrapper">
+        <div class="map-leftside">
+            <!--<div ui-view="mapFilters"></div>-->
+
+            <button class="btn-wim btn-purple btn-longtext" ng-show="!createSiteModeActive" ng-click="createSiteModeActive = !createSiteModeActive">{{createSiteButtonText}}</button>
+            <button ng-class="'btn-wim btn-green btn-longtext'" ng-if="createSiteModeActive" ng-click="createSiteFromMap()">Create new site at dot location</button>
+            <!-- <small class="cancel-create" ng-show="createSiteModeActive" ng-click="createSiteModeActive = !createSiteModeActive"><b>Cancel</b></small> -->
+            <!-- <small class="cancel-create nohover" ng-show="!createSiteModeActive">&nbsp;</small> -->
+
+            <div ui-view="mapSiteInfo"></div>
+            <div ui-view="mapPeaksView"></div>
+            <div ui-view="mapSensorPropose"></div>
+
+            <div style="padding:5px;margin-bottom:10px">
+                <span style="font-size:large;">Important usage notes and instructions</span>
+                <div style="margin:5px">
+                    <p>{{message}}</p>
+                </div>
+            </div>
+
+        </div><!--
+
+        --><div class="map-rightside">
+
+                <div class="createSiteModeActive createSiteModeActiveTop" ng-show="createSiteModeActive">CREATE SITE MODE <b ng-click="createSiteModeActive = !createSiteModeActive">Exit</b></div>
+
+                <div>
+
+                    <leaflet ng-style="mapStyle" markers-watch-options="markersWatchOptions" controls="controls" bounds="bounds" paths="paths"  lf-center="mapCenter" markers="markers" layers="layers" event-broadcast="events" width="100%" height="700px">
+                        <spinner name="mapSpinner">
+                            <div class="loading">
+                                <div class="loadingcontent"><p class="loadingspinner" style=""><img src="images/loading1.gif" /></p></div>
+                            </div>
+                        </spinner>
+                        <wim-legend stop-event="click"></wim-legend>
+                    </leaflet>
+                </div>
+                <!-- <div class="createSiteModeActive createSiteModeActiveBottom" ng-if="createSiteModeActive">CREATE SITE MODE</div> -->
+
+                <!--<div class="mapCreateSiteButtonsDiv">-->
+                    <!--<button ng-class="createSiteModeActive ? 'btn btn-danger' : 'btn btn-primary'" ng-click="createSiteModeActive = !createSiteModeActive">{{createSiteButtonText}}</button>-->
+                    <!--<button ng-class="'btn btn-warning'" ng-if="createSiteModeActive" ng-click="createSiteFromMap()">Create new site at clicked location</button>-->
+                <!--</div><br>-->
+
+               <div ui-view="mapFilters"></div>
+        </div>
+</div>
+

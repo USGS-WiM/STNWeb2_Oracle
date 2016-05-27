@@ -1,0 +1,104 @@
+<uib-accordion close-others="false">
+    <uib-accordion-group is-open="status.sensorOpen">
+        <uib-accordion-heading>
+            <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.sensorOpen, 'glyphicon-chevron-right': !status.sensorOpen}"></i>
+            <span>Sensors</span>
+            <span class="badge pull-right">{{sensorCount.total}}</span>
+        </uib-accordion-heading>
+        <div class="col-md-12" ng-show="!sessionEventExists" style="border:solid 1px red">To deploy or retrieve a sensor, first choose an Event above.</div>
+        <label class="col-md-9">-- Proposed Sensors --</label>
+        <div class="btn-group pull-right">
+            <div class="btn-group">
+                <button type="button" class="borderLess" ng-click="showHideProposed()" tooltip-append-to-body="true" tooltip-placement="left" uib-tooltip="Show/Hide Proposed Sensors">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-10" style="border:1px solid gray; padding:3px;" ng-show="showProposed">
+            <ul style="padding-left:0">
+                <li style="list-style:none;" ng-repeat="ps in deployTypeList">
+                    <input type="checkbox" ng-model="ps.selected" ng-click="" ng-value="{{ps.selected}}" />
+                    <span>{{ps.METHOD}}</span>
+                </li>
+            </ul>
+            <div class="col-md-12 center-block">
+                <button type="button" class="btn btn-primary center-block" ng-click="AddProposed()">Add</button>
+            </div>
+        </div>
+        <br clear="all" />
+        <!-- only proposed sensors here -->
+        <div ng-repeat="s in SiteSensors">
+            <div ng-if="s.InstrumentStats[0].STATUS_TYPE_ID == 4">
+                <ul>
+                    <li style="list-style:none;padding-bottom: 15px;">
+                        <span class="col-sm-10 borderLess">{{s.Instrument.Deployment_Type || s.Instrument.Sensor_Type}} Sensor</span>
+                        <div ng-show="sessionEventExists" class="pull-right">
+                            <button type="button" class="btn btn-primary" style="padding:0" ng-click="showSensorModal(s)" tooltip-placement="left" tooltip-append-to-body="true" uib-tooltip="Deploy this proposed sensor">
+                                <span>Deploy</span>
+                            </button>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <label class="col-md-9">-- Deployed Sensors --</label>
+        <div ng-show="sessionEventExists" class="btn-group pull-right">
+            <div class="btn-group">
+                <button type="button" class="borderLess" ng-click="showSensorModal(0)" tooltip-placement="left" tooltip-append-to-body="true" uib-tooltip="Deploy a new Sensor">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </div>
+        </div>
+
+        <br clear="all" />
+        <!-- only deployed sensors here -->
+        <div ng-repeat="s in SiteSensors">
+            <div ng-if="s.InstrumentStats[0].STATUS_TYPE_ID == 1">
+                <ul>
+                    <li style="list-style:none;padding-bottom: 15px;">
+                        <span class="col-sm-9 borderLess" style="padding:0">
+                            <a class="btn borderLess" style="padding:0" ng-click="showSensorModal(s)" title="{{s.Instrument.SERIAL_NUMBER}}- {{s.Instrument.Deployment_Type || s.Instrument.Sensor_Type}} Sensor">{{s.Instrument.SERIAL_NUMBER}}- {{s.Instrument.Deployment_Type || s.Instrument.Sensor_Type}} Sensor</a>
+                        </span>
+                        <div ng-show="sessionEventExists" class="pull-right">
+                            <button type="button" class="btn btn-primary" style="padding:0" ng-click="showRetrieveModal(s)" tooltip-placement="left" tooltip-append-to-body="true" uib-tooltip="Retrieve this sensor">
+                                <span>Retrieve</span>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- only retrieved sensors here -->
+        <label class="col-md-9">-- Retrieved Sensors --</label>
+        <br clear="all" />
+        <div ng-repeat="s in SiteSensors">
+            <div ng-if="s.InstrumentStats[0].STATUS_TYPE_ID == 2">
+                <ul>
+                    <li style="list-style:none;padding-bottom: 15px;">
+                        <span class="col-sm-9 borderLess" style="padding:0">
+                            <a class="btn borderLess" style="padding:0" ng-click="showFullSensorModal(s)" title="{{s.Instrument.SERIAL_NUMBER}}- {{s.Instrument.Deployment_Type || s.Instrument.Sensor_Type}} Sensor">{{s.Instrument.SERIAL_NUMBER}}- {{s.Instrument.Deployment_Type || s.Instrument.Sensor_Type}} Sensor</a>
+                        </span>                       
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- only lost sensors here -->
+        <label class="col-md-9">-- Lost Sensors --</label>
+        <br clear="all" />
+        <div ng-repeat="s in SiteSensors">
+            <div ng-if="s.InstrumentStats[0].STATUS_TYPE_ID == 3">
+                <ul>
+                    <li style="list-style:none;padding-bottom: 15px;">
+                        <span class="col-sm-9 borderLess" style="padding:0">
+                            <a class="btn borderLess" style="padding:0" ng-click="showFullSensorModal(s)" title="{{s.Instrument.SERIAL_NUMBER}}- {{s.Instrument.Deployment_Type || s.Instrument.Sensor_Type}} Sensor">{{s.Instrument.SERIAL_NUMBER}}- {{s.Instrument.Deployment_Type || s.Instrument.Sensor_Type}} Sensor</a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </uib-accordion-group>
+</uib-accordion>

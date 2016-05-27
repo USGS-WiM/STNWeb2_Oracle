@@ -1,0 +1,85 @@
+<div ng-if="accountRole == 'Admin'">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width:0"></th>
+                <th>Marker</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="m in markList | orderBy: 'MARKER1'">
+                <td style="white-space: nowrap">
+                    <!-- form -->
+                    <form editable-form name="Mrowform" onaftersave="saveMarker($data, m.MARKER_ID)" ng-show="Mrowform.$visible" class="form-buttons form-inline" shown="inserted == m">
+                        <button type="submit" ng-disabled="Mrowform.$waiting" class="btn btn-primary">
+                            save
+                        </button>
+                        <button type="button" ng-disabled="Mrowform.$waiting" ng-click="Mrowform.$cancel()" class="btn btn-default">
+                            cancel
+                        </button>
+                    </form>
+                    <div class="buttons" ng-show="!Mrowform.$visible">
+                        <button class="btn btn-primary" ng-click="Mrowform.$show()">edit</button>
+                        <button class="btn btn-danger" ng-click="deleteMarker(m)">del</button>
+                    </div>
+                </td>
+                <td>
+                    <div style="display:none"><span editable-text="m.MARKER_ID" e-form="Mrowform" e-name="MARKER_ID">{{m.MARKER_ID}}</span></div>
+                    <span editable-text="m.MARKER1" e-name="MARKER1" e-form="Mrowform">{{ m.MARKER1 || '' }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    <button ng-show="addMButtonShowing" class="btn btn-primary" ng-click="showAddMClicked()">Add New Marker</button>
+
+    <div ng-show="showAddMForm">
+        <form class="form-horizontal" name="lookupForm.markFm">
+            <fieldset>
+
+                <div class="form-group required">
+                    <label class="col-md-3 control-label req" for="MARKER1">Marker:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="MARKER1" name="MARKER1" type="text" placeholder="" ng-model="newM.MARKER1" required />
+                    </div>
+                </div>
+
+
+                <!--submit button-->
+                <div class="form-group">
+                    <div class="col-md-2 col-md-offset-2">
+                        <span>
+                            <button class="btn btn-primary" ng-click="AddMarker(lookupForm.markFm.$valid, newM)">
+                                Add
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form><button class="btn btn-default center-block" style="margin-top:-48px;" ng-click="NeverMindM()">
+            Never Mind
+        </button>
+    </div>
+</div><!--end admin view-->
+<div ng-if="accountRole !='Admin'">
+    <script>
+        var sortingOrder = 'MARKER1';
+    </script>
+
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th class="MARKER1">Marker&nbsp;<a ng-click="sort_by('MARKER1')"><i class="glyphicon glyphicon-sort"></i></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="m in markList | orderBy:sortingOrder:reverse">
+                <td>{{ m.MARKER1 || '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

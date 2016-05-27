@@ -1,0 +1,393 @@
+/*
+    ===========================
+    ===========================
+         Leaflet Overrides
+    ===========================
+    ===========================
+*/
+
+.angular-leaflet-control-layers-collapsed:hover{
+    cursor: pointer !important;
+}
+
+.legendSwatch {
+    opacity: 0.6;
+}
+
+.legendGroup {
+    padding:10px
+}
+
+/* disable some default controls*/
+.leaflet-control-layers.leaflet-control {
+    display: none;
+}
+
+.angular-leaflet-control-layers-collapsed {
+
+    position: absolute;
+    background: white;
+    z-index: 100;
+    right: 10px;
+    top: 10px;
+    box-shadow: 1px 1px 5px #333;
+    padding: 15px;
+    background-image: url(../images/layers.png);
+    background-repeat: no-repeat;
+    background-position: center;
+	width: 36px;
+	height: 36px;
+}
+
+.angular-leaflet-control-layers-expanded {
+    position: absolute;
+    background: white;
+    z-index: 100;
+    right: 10px;
+    top: 10px;
+    width: 200px;
+    height:90%;
+    box-shadow: 1px 1px 5px #333;
+    padding: 5px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    transition: all .2s;
+}
+
+.angular-leaflet-control-layers-header {
+    height: 30px;
+    display: inline-block;
+    float: left;
+}
+
+.angular-leaflet-control-layers-close-button {
+    margin-right:20px;
+}
+
+.angular-leaflet-control-layers-header .close{
+    font-size: 22pt;
+    margin: 0 auto;
+    width: 40px;
+    height: 40px;
+    opacity: 1;
+    background-color: white;
+    border-radius: 50%;
+    box-sizing: border-box;
+    padding: 0 0 2px 0;
+    float: left;
+    color: rgba(0,0,0,0.5);
+    box-shadow: 1px 1px 5px #333;
+    position: relative;
+    left: 10px;
+    top: -25px;
+}
+.angular-leaflet-control-layers-header .close:hover{
+    border: none;
+    color: rgba(44,116,183,.5);
+}
+
+.angular-leaflet-control-layers .lf-row label {
+    cursor: pointer;
+    width: 75%;
+}
+
+.angular-leaflet-control-layers .lf-row .lf-icon-ol {
+    padding-left: 8px;
+}
+
+.angular-leaflet-control-layers .lf-row .lf-icon {
+    cursor: pointer;
+    float: left;
+    margin-right: 5px;
+    padding-top: 2px;
+}
+
+.angular-leaflet-control-layers .lf-row label .lf-text {
+    float: left;
+}
+
+.angular-leaflet-control-layers .lf-row .lf-icon-ol-group {
+    color: #00650a;
+}
+
+.angular-leaflet-control-layers .lf-row .lf-icons {
+    float: right;
+}
+
+/*Layers/right button*/
+.angular-leaflet-control-layers-expanded{
+    padding: 0;
+}
+.angular-leaflet-control-layers-expanded .close-legend{
+    display: block;
+    margin: 0 auto;
+    padding: 10px 0;
+    border: none;
+    width: 100%;
+    font-size:9pt;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.angular-leaflet-control-layers-expanded .list-group-item,
+.angular-leaflet-control-layers-expanded .list-group-item-active{
+    padding: 15px 5px 25px 5px;
+    font-weight: 300;
+    text-align: center;
+    font-size: 8pt;
+    border-radius: 0 !important;
+}
+.angular-leaflet-control-layers-expanded .list-group-item:hover,
+.angular-leaflet-control-layers-expanded .list-group-item-active:hover{
+    cursor: pointer;
+}
+
+/*Hide Checkboxes*/
+.angular-leaflet-control-layers-expanded .list-group-item input,
+.angular-leaflet-control-layers-expanded .list-group-item-active input{
+    display: inline-block;
+    width: 50px;
+    display: none !important;
+}
+/*Styling for items with check box*/
+.angular-leaflet-control-layers-expanded .list-group-item label.hasCheckbox,
+.angular-leaflet-control-layers-expanded .list-group-item-active label.hasCheckbox{
+    box-sizing: border-box;
+    padding-right: 18px;
+
+}
+.angular-leaflet-control-layers-expanded .list-group-item label,
+.angular-leaflet-control-layers-expanded .list-group-item-active label{
+    display: inline-block;
+    vertical-align: middle;
+}
+.angular-leaflet-control-layers-expanded .list-group-item label:hover,
+.angular-leaflet-control-layers-expanded .list-group-item-active label:hover{
+    cursor: pointer;
+}
+.angular-leaflet-control-layers-expanded .list-group-item i:hover,
+.angular-leaflet-control-layers-expanded .list-group-item-active i:hover{
+    cursor: pointer;
+    -webkit-transform: scale(1.19);
+    transform: scale(1.19);
+    transition: 0.15s;
+}
+
+.angular-leaflet-control-layers-expanded .list-group-item label.hasCheckbox:before,
+.angular-leaflet-control-layers-expanded .list-group-item-active label.hasCheckbox:before{
+    content: "\f00c";
+    font-family: FontAwesome;
+    display: inline-block;
+    background-color: #FFF;
+    border: 1px solid #D3D3D8;
+    vertical-align: middle;
+    height: 18px;
+    width: 18px;
+    text-align: center;
+    border-radius: 3px;
+    font-size: 0pt;
+    transition: 0.15s;
+    box-sizing: border-box;
+    float: left;
+    margin-left: 5px;
+    color: #0071BC;
+    position: relative;
+    top: -2px;
+    padding: 0 0 3px 1px;
+    line-height: 17px;
+}
+.angular-leaflet-control-layers-expanded .list-group-item label.hasCheckbox:before:hover,
+.angular-leaflet-control-layers-expanded .list-group-item-active label.hasCheckbox:before:hover{
+    border-color: #0071BC;
+    transition: 0.15s;
+    cursor: pointer !important;
+}
+.angular-leaflet-control-layers-expanded .list-group-item label.checkboxEnabled:before,
+.angular-leaflet-control-layers-expanded .list-group-item-active label.checkboxEnabled:before{
+    background-color: #FFF;
+    font-size: 10pt;
+}
+
+
+/*Sidebar item*/
+.sitebar-item{
+
+}
+.sitebar-item input[type=radio]{
+    position: absolute;
+    visibility: hidden;
+    margin: 0;
+}
+.sitebar-item label{
+    box-sizing: border-box;
+    padding: 2px 0 !important;
+    font-weight: 400 !important;
+    font-size: 8pt !important;
+    letter-spacing: 1px;
+    margin: 0;
+    color: #707280;
+    transition: 0.15s;
+}
+.sitebar-item label:hover{
+    cursor: pointer;
+    color: #3E4144;
+    transition: 0.15s;
+}
+.sitebar-item label.hasRadio:hover:before{
+    border-color: #0071BC;
+    transition: 0.15s;
+}
+.sitebar-item label.hasRadio:before{
+    content: '\f111';
+    font-family: FontAwesome;
+    display: inline-block;
+    background-color: #FFF;
+    border: 1px solid #D3D3D8;
+    vertical-align: middle;
+    height: 18px;
+    transition: 0.15s;
+    width: 18px;
+    text-align: center;
+    border-radius: 50%;
+    font-size: 0pt;
+    transition: 0.15s;
+    box-sizing: border-box;
+    float: left;
+    margin-right: 5px;
+    color: #0071BC;
+    position: relative;
+    top: -2px;
+    padding: 0 0 3px 1px;
+    line-height: 17px;
+}
+.sitebar-item label.hasRadio.radioSelected:before{
+    color: #0071BC !important;
+    font-size: 8pt;
+}
+
+
+/*Inside*/
+.legendGroup label{
+    display: block;
+    width: 100%;
+    font-weight: 300 !important;
+    text-align: center;
+    color: #707280;
+    font-size: 9pt !important;
+}
+
+
+
+.angular-leaflet-control-layers-expanded .list-group-item-active{
+    background-color: #2D3245;
+}
+.angular-leaflet-control-layers-expanded .list-group-item-active label{
+    color: #FFF;
+}
+.angular-leaflet-control-layers-expanded .list-group-item-active label,
+.angular-leaflet-control-layers-expanded .list-group-item label{
+    display: block;
+    text-align: center;
+}
+.angular-leaflet-control-layers-expanded .list-group-item .fa-chevron-down,
+.angular-leaflet-control-layers-expanded .list-group-item-active .fa-chevron-up{
+    display: block !important;
+    width: 100% !important;
+    padding: 0 0 10px 0 !important;
+    text-align: center !important;
+
+}
+
+
+.wimLegend-list-group-body {
+    background-color:white;
+    border-radius:0 0 5px 5px;
+    padding-right:10px;
+    padding-bottom:10px;
+    padding-top: 15px;
+    padding-left:10px;
+    margin-bottom:3px;
+    border:1px thin;
+}
+.wimLegend-list-group-body a {
+    padding-left:10px;
+    float:left;
+    height: 25px;
+    width:100%;
+    padding-right: 10px;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.wimLegend-list-group-item{
+    background-color: #E2E2E2;
+    text-align: right;
+    text-transform: uppercase;
+    font-size: 10pt;
+    box-sizing: border-box;
+    padding: 18px;
+    letter-spacing: 2px;
+    font-weight: 400;
+    color: #6E7490 !important;
+    transition: 0.2s;
+}
+.wimLegend-list-group-item i{
+    padding-left: 5px;
+    display: inline-block;
+    text-align: center;
+    width: 50px;
+}
+.wimLegend-list-group-item:hover{
+    color:#000 !important;
+    transition: 0.2s;
+}
+
+/*Active sidebar item*/
+.wimLegend-list-group-item-active{
+    display: block;
+    background-color: #0071BC;
+    text-align: right;
+    text-transform: uppercase;
+    font-size: 10pt;
+    box-sizing: border-box;
+    padding: 18px;
+    letter-spacing: 2px;
+    font-weight: 400;
+    color: #fff !important;
+    transition: 0.2s;
+}
+.wimLegend-list-group-item-active i{
+    padding-left: 5px;
+    display: inline-block;
+    text-align: center;
+    width: 50px;
+    position: relative; top:3px;
+}
+.wimLegend-list-group-item-active:hover{
+    text-decoration: none !important;
+}
+
+/*Active small link inside*/
+.wimLegend-list-group-item-link-active{
+    color: RGBA(34, 45, 57, 1);
+    font-weight:bolder;
+}
+
+
+.close-legend{
+    background-color: #FFF;
+    text-transform: uppercase;
+    font-weight: bolder;
+    color: #5C5F70;
+    box-sizing: border-box;
+    padding: 15px 0 !important;
+    letter-spacing: 2px;
+    font-size: 9pt !important;
+    transition: 0.15s;
+    display: block;
+}
+.close-legend:hover{
+    background-color: #FCFCFC;
+    transition: 0.15s;
+    cursor: pointer;
+}

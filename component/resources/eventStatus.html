@@ -1,0 +1,81 @@
+<div ng-if="accountRole == 'Admin'">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width:0"></th>
+                <th>Event Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="es in eventStatList | orderBy: 'EVENT_STATUS_ID'">
+                <td style="white-space: nowrap">
+                    <!-- form -->
+                    <form editable-form name="ESrowform" onaftersave="saveEventStat($data, es.EVENT_STATUS_ID)" ng-show="ESrowform.$visible" class="form-buttons form-inline" shown="inserted == es">
+                        <button type="submit" ng-disabled="ESrowform.$waiting" class="btn btn-primary">
+                            save
+                        </button>
+                        <button type="button" ng-disabled="ESrowform.$waiting" ng-click="ESrowform.$cancel()" class="btn btn-default">
+                            cancel
+                        </button>
+                    </form>
+                    <div class="buttons" ng-show="!ESrowform.$visible">
+                        <button class="btn btn-primary" ng-click="ESrowform.$show()">edit</button>
+                        <button class="btn btn-danger" ng-click="deleteEventStat(es)">del</button>
+                    </div>
+                </td>
+                <td>
+                    <div style="display:none"><span editable-text="es.EVENT_STATUS_ID" e-form="ESrowform" e-name="EVENT_STATUS_ID">{{es.EVENT_STATUS_ID}}</span></div>
+                    <span editable-text="es.STATUS" e-name="STATUS" e-form="ESrowform">{{ es.STATUS || '' }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    <button ng-show="addESButtonShowing" class="btn btn-primary" ng-click="showAddESClicked()">Add New Event Status</button>
+
+    <div ng-show="showAddESForm">
+        <form class="form-horizontal" name="lookupForm.eventStatFm">
+            <fieldset>
+                <div class="form-group required">
+                    <label class="col-md-3 control-label req" for="STATUS">Event Status:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="STATUS" name="STATUS" type="text" placeholder="" ng-model="newES.STATUS" required />
+                    </div>
+                </div>
+
+                <!--submit button-->
+                <div class="form-group">
+                    <div class="col-md-2 col-md-offset-2">
+                        <span>
+                            <button class="btn btn-primary" ng-click="AddEventStat(lookupForm.eventStatFm.$valid, newES)">
+                                Add
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </fieldset>
+        </form><button class="btn btn-default center-block" style="margin-top:-48px;" ng-click="NeverMindES()">
+            Never Mind
+        </button>
+    </div>
+</div><!--end admin view-->
+<div ng-if="accountRole !='Admin'">
+    <script>
+        var sortingOrder = 'STATUS';
+    </script>
+
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th class="STATUS">Event Status&nbsp;<a ng-click="sort_by('STATUS')"><i class="glyphicon glyphicon-sort"></i></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="es in eventStatList | orderBy:sortingOrder:reverse">
+                <td>{{ es.STATUS || '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

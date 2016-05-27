@@ -1,0 +1,158 @@
+<div ng-if="accountRole =='Admin'">
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Agency Name</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zip</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="a in agencyList | orderBy: 'AGENCY_NAME'">
+                <td style="white-space: nowrap">
+                    <!-- form -->
+                    <form editable-form name="Arowform" onaftersave="saveAgency($data, a.AGENCY_ID)" ng-show="Arowform.$visible" class="form-buttons form-inline" shown="inserted == a">
+                        <button type="submit" ng-disabled="Arowform.$waiting" class="btn btn-primary">
+                            save
+                        </button>
+                        <button type="button" ng-disabled="Arowform.$waiting" ng-click="Arowform.$cancel()" class="btn btn-default">
+                            cancel
+                        </button>
+                    </form>
+                    <div class="buttons" ng-show="!Arowform.$visible">
+                        <button class="btn btn-primary" ng-click="Arowform.$show()">edit</button>
+                        <button class="btn btn-danger" ng-click="deleteAgency(a)">del</button>
+                    </div>
+                </td>
+                <td>
+                    <div style="display:none"><span editable-text="a.AGENCY_ID" e-form="Arowform" e-name="AGENCY_ID">{{a.AGENCY_ID}}</span></div>
+                    <span editable-text="a.AGENCY_NAME" e-name="AGENCY_NAME" e-form="Arowform">{{ a.AGENCY_NAME || '' }}</span>
+                </td>
+                <td>
+                    <span editable-text="a.ADDRESS" e-name="ADDRESS" e-form="Arowform">{{ a.ADDRESS || '' }}</span>
+                </td>
+                <td>
+                    <span editable-text="a.CITY" e-name="CITY" e-form="Arowform">{{ a.CITY || '' }}</span>
+                </td>
+                <td>
+                    <span editable-select="a.STATE" e-name="STATE" e-form="Arowform" e-ng-options="s.STATE_ABBREV as s.STATE_ABBREV for s in stateList | orderBy: 'STATE_NAME'">
+                        {{showStateAbbrev(a)}}
+                    </span>
+                </td>
+                <td>
+                    <span editable-text="a.ZIP" e-name="ZIP" e-form="Arowform">{{a.ZIP || ''}}</span>
+                </td>
+                <td>
+                    <span editable-text="a.PHONE" e-my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" e-name="PHONE" e-form="Arowform">{{a.PHONE || ''}}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    <button ng-show="addAgButtonShowing" class="btn btn-primary" ng-click="showAddAgClicked()">Add New Agency</button>
+
+    <div ng-show="showAddAgForm">
+        <form class="form-horizontal" name="lookupForm.agencyFm">
+            <fieldset>
+
+                <div class="form-group required">
+                    <label class="col-md-3 control-label req" for="AGENCY_NAME">Agency Name:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="AGENCY_NAME" name="AGENCY_NAME" type="text" placeholder="" ng-model="newAg.AGENCY_NAME" required />
+                    </div>
+                    <!--&nbsp;
+            <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip"
+                  title="Describe your project data and where it resides (USGS NWIS, the Water Quality Portal, Access database, Excel spreadsheet, etc.). If your project uses multiple systems at different locations, enter each as a separate Data entry."
+                  data-placement="right" tooltip>
+            </span>-->
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="ADDRESS">Address:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="ADDRESS" name="ADDRESS" type="text" placeholder="" ng-model="newAg.ADDRESS" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="CITY">City:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="CITY" name="CITY" type="text" placeholder="" ng-model="newAg.CITY" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="STATE">State:</label>
+                    <div class="col-md-6">
+                        <select class="form-control" id="STATE" name="STATE" ng-model="newAg.STATE" ng-options="s.STATE_ABBREV as s.STATE_ABBREV for s in stateList | orderBy: 'STATE_NAME'">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="ZIP">Zip:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="ZIP" name="ZIP" type="text" placeholder="" ng-model="newAg.ZIP" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label req" for="PHONE">Phone:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="PHONE" name="PHONE" type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}"
+                               ng-model="newAg.PHONE" />
+                    </div>
+                </div>
+
+                <!--submit button-->
+                <div class="form-group">
+                    <div class="col-md-2 col-md-offset-2">
+                        <span>
+                            <button class="btn btn-primary" ng-click="AddAgency(lookupForm.agencyFm.$valid, newAg)">
+                                Add
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </fieldset>
+        </form><button class="btn btn-default center-block" style="margin-top:-48px;" ng-click="NeverMindAg()">
+            Never Mind
+        </button>
+    </div>
+</div> <!--end admin view-->
+<div ng-if="accountRole !='Admin'">
+    <script>
+        var sortingOrder = 'AGENCY_NAME';
+    </script>
+
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th class="AGENCY_NAME">Agency Name&nbsp;<a ng-click="sort_by('AGENCY_NAME')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                <th class="ADDRESS">Address&nbsp;<a ng-click="sort_by('ADDRESS')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                <th class="CITY">City&nbsp;<a ng-click="sort_by('CITY')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                <th class="STATE">State&nbsp;<a ng-click="sort_by('STATE')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                <th class="ZIP">Zip&nbsp;<a ng-click="sort_by('ZIP')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                <th class="PHONE">Phone&nbsp;<a ng-click="sort_by('PHONE')"><i class="glyphicon glyphicon-sort"></i></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="a in agencyList | orderBy:sortingOrder:reverse">
+                <td>{{ a.AGENCY_NAME || '' }}</td>
+                <td>{{ a.ADDRESS || '' }}</td>
+                <td>{{ a.CITY || '' }}</td>
+                <td>{{a.STATE}}</td>
+                <td>{{a.ZIP || ''}}</td>
+                <td>{{a.PHONE || ''}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

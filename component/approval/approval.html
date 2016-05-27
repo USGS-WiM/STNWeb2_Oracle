@@ -1,0 +1,67 @@
+<div class="page-padding">
+
+    <h3 class="page-heading">Pending Approval - For {{sessionEvent}}</h3>
+
+    <hr />
+
+    <p>Choose what you want to approve. Search by one or more parameters</p>
+
+    <form name="approvalForm" class="wim-form border-bottom">
+        <div class="form-item item-25">
+            <label for="EVENT">Event:</label>
+            <div class="form-item-value">{{sessionEvent}}</div>
+        </div><!--
+
+        --><div class="form-item item-25">
+            <label for="STATE">States:</label>
+            <select id="STATE_ABBREV" name="STATE_ABBREV" ng-model="ChosenState.id"
+                    ng-options="s.STATE_ABBREV as s.STATE_NAME for s in allStates">
+                <option value=""></option>
+            </select>
+        </div><!--
+
+        --><div class="form-item item-25">
+            <label for="MEMBER">Members:</label>
+            <select id="MEMBER_ID" name="MEMBER_ID" ng-model="ChosenMember.id"
+                    ng-options="m.MEMBER_ID as (m.LNAME || '') + ', ' + (m.FNAME || '') for m in allMembers | orderBy: 'LNAME'">
+                <option value=""></option>
+            </select>
+        </div><!--
+
+        --><div class="form-item item-25">
+            <label>&nbsp;</label>
+            <button class="btn-wim btn-blue" ng-click="search()">
+                Search
+            </button>
+        </div>
+
+
+    </form>
+
+    <div ng-if="showHWMbox" class="results-box rb-50">
+        <h3 class="results-box-title">Unapproved Site HWMs</h3>
+        <ul ng-show="unApprovedHWMs.length > 0">
+            <li style="list-style:none;" ng-repeat="h in unApprovedHWMs | orderBy: 'SITE_ID'">
+                <span><a ui-sref="site.dashboard({id: h.SITE_ID})">{{h.SITE_NO}}</a>: {{h.HWM_ID}} ({{h.ELEV_FT}} ft.)</span>
+            </li>
+        </ul>
+        <div ng-show="unApprovedHWMs.length == 0" class="results-box-no-result">
+            No HWMs returned from query.
+        </div>
+    </div><!--
+
+    --><div ng-if="showDFbox" class="results-box rb-50">
+        <h3 class="results-box-title">Unapproved Instrument Data Files</h3>
+        <ul ng-show="unApprovedDFs.length > 0"> <!--track by $index-->
+            <li style="list-style:none;" ng-repeat="d in unApprovedDFs | orderBy: 'SiteId'">
+                <span><a ui-sref="site.dashboard({id: d.SiteId})">{{d.SiteNo}}</a>: {{d.depType || d.senType}}</span>
+            </li>
+        </ul>
+        <div ng-show="unApprovedDFs.length == 0" class="results-box-no-result">
+            No Data Files returned from query.
+        </div>
+    </div>
+
+
+
+</div><!-- /PAGE PADDING -->
