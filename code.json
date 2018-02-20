@@ -16,7 +16,7 @@
       ]
     },
 
-    "homepageURL": "https://wim.usgs.gov",
+    "homepageURL": null,
     "downloadURL": "https://github.com/USGS-WiM/STNWeb2_Oracle/archive/master.zip",
     "disclaimerURL": "https://github.com/USGS-WiM/STNWeb2_Oracle/blob/master/DISCLAIMER.md",
     "repositoryUrl": "https://github.com/USGS-WiM/STNWeb2_Oracle",
