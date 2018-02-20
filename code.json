@@ -1,0 +1,47 @@
+[
+  {
+    "name": "STNWeb2_Oracle",
+    "organization": "U.S. Geological Survey",
+    "description": "STNWeb2 angularJS with Oracle DB",
+    "version": "v0.0.0",
+    "status": "Archival"
+
+    "permissions": {
+      "usageType": "openSource",
+      "licenses": [
+        {
+          "name": "Public Domain",
+          "URL": "https://github.com/usgs/STNWeb2_Oracle/blob/master/LICENSE.md"
+        }
+      ]
+    },
+
+    "homepageURL": "https://wim.usgs.gov",
+    "downloadURL": "https://github.com/USGS-WiM/STNWeb2_Oracle/archive/master.zip",
+    "disclaimerURL": "https://github.com/USGS-WiM/STNWeb2_Oracle/blob/master/DISCLAIMER.md",
+    "repositoryUrl": "https://github.com/USGS-WiM/STNWeb2_Oracle",
+    "vcs": "git",
+
+    "laborHours": null,
+
+    "tags": [
+      "stn",
+      "oracle",
+      "angular",
+      "web"
+    ],
+
+    "languages": [
+      "javascript"
+    ],
+
+    "contact": {
+      "name": "Tonia Roddick",
+      "email": "troddick@usgs.gov"
+    },
+
+    "date": {
+      "metadataLastUpdated": "2018-02-20"
+    }
+  }
+]
